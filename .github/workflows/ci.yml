@@ -46,7 +46,7 @@ jobs:
         run: npm run test:coverage
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           files: frontend/coverage/lcov.info
           flags: frontend
@@ -114,7 +114,7 @@ jobs:
           REDIS_URL: redis://localhost:6379
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           files: backend/coverage.xml
           flags: backend
