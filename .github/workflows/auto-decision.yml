@@ -1,0 +1,172 @@
+name: Auto-Check Decision Loop
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issues:
+    types: [opened, edited, labeled]
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+
+jobs:
+  # Auto-check PR and decide action
+  pr-decision:
+    name: PR Decision Agent
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run decision agent
+        id: decision
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # Analyze PR and make decision
+          DECISION=$(node scripts/pr-decision-agent.mjs)
+          echo "decision=$DECISION" >> $GITHUB_OUTPUT
+
+      - name: Auto-approve if safe
+        if: steps.decision.outputs.decision == 'approve'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: ${{ github.event.pull_request.number }},
+              event: 'APPROVE',
+              body: '✅ Auto-approved by AI agent. Changes are safe and follow conventions.'
+            });
+
+      - name: Request changes if issues found
+        if: steps.decision.outputs.decision == 'request_changes'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: ${{ github.event.pull_request.number }},
+              event: 'REQUEST_CHANGES',
+              body: '❌ Changes requested by AI agent. See comments for details.'
+            });
+
+      - name: Comment if needs discussion
+        if: steps.decision.outputs.decision == 'discuss'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.pull_request.number }},
+              body: '💬 This PR needs discussion. AI agent has questions - see review comments.'
+            });
+
+  # Auto-check issues and decide action
+  issue-decision:
+    name: Issue Decision Agent
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run issue decision agent
+        id: decision
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          # Analyze issue and make decision
+          DECISION=$(node scripts/issue-decision-agent.mjs)
+          echo "decision=$DECISION" >> $GITHUB_OUTPUT
+
+      - name: Close if invalid/duplicate
+        if: steps.decision.outputs.decision == 'close'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.issue.number }},
+              state: 'closed',
+              state_reason: 'not_planned'
+            });
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.issue.number }},
+              body: '🤖 Closed by AI agent. This issue is invalid, duplicate, or out of scope.'
+            });
+
+      - name: Add labels if categorization needed
+        if: steps.decision.outputs.decision == 'label'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = '${{ steps.decision.outputs.labels }}'.split(',');
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.issue.number }},
+              labels: labels
+            });
+
+      - name: Assign if needs human review
+        if: steps.decision.outputs.decision == 'assign'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.issue.number }},
+              assignees: ['iadanish']
+            });
+
+  # Periodic health check
+  health-check:
+    name: Repository Health Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run health check agent
+        id: health
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Run comprehensive health check
+          REPORT=$(node scripts/health-check-agent.mjs)
+          echo "report=$REPORT" >> $GITHUB_OUTPUT
+
+      - name: Create health report issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🏥 Repository Health Report - ${{ github.run_id }}',
+              body: '${{ steps.health.outputs.report }}',
+              labels: ['health-report', 'automated']
+            });
+
+      - name: Close stale issues
+        uses: actions/stale@v9
+        with:
+          stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity.'
+          close-issue-message: 'Closed by AI agent due to inactivity.'
+          days-before-stale: 30
+          days-before-close: 7
+          stale-issue-label: 'stale'

@@ -136,7 +136,7 @@ jobs:
         working-directory: backend
         run: |
           pip install pip-licenses
-          pip-licenses --fail-on "GPL-3.0" "AGPL-3.0"
+          pip-licenses --fail-on="GPL-3.0;AGPL-3.0"
 
   # GDPR Compliance Check
   gdpr-compliance:
