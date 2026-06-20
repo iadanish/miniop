@@ -1,0 +1,221 @@
+name: Benchmark Tracking
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
+
+jobs:
+  # Agent Code-Writing Percentage
+  agent-code-metrics:
+    name: Agent Code Metrics
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Calculate agent code percentage
+        run: |
+          # Count commits by agent vs human
+          TOTAL_COMMITS=$(git rev-list --count HEAD)
+          AGENT_COMMITS=$(git log --format='%an' | grep -i "agent\|bot\|automated" | wc -l)
+          
+          if [ $TOTAL_COMMITS -gt 0 ]; then
+            PERCENTAGE=$((AGENT_COMMITS * 100 / TOTAL_COMMITS))
+            echo "Agent code-writing: ${PERCENTAGE}% (${AGENT_COMMITS}/${TOTAL_COMMITS} commits)"
+            echo "agent_code_percentage=${PERCENTAGE}" >> $GITHUB_OUTPUT
+            
+            if [ $PERCENTAGE -lt 80 ]; then
+              echo "⚠️ Below Anthropic benchmark (80%+)"
+            else
+              echo "✅ Meets Anthropic benchmark (80%+)"
+            fi
+          else
+            echo "No commits yet"
+            echo "agent_code_percentage=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Track in database
+        run: |
+          # This would connect to Supabase to track metrics
+          echo "Tracking agent code percentage..."
+          # curl -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/benchmarks" \
+          #   -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+          #   -H "Content-Type: application/json" \
+          #   -d '{"metric": "agent_code_percentage", "value": ${{ steps.metrics.outputs.agent_code_percentage }}}'
+
+  # Task Success Rate
+  task-success-metrics:
+    name: Task Success Metrics
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run test suite
+        run: |
+          # Run all tests and capture results
+          cd frontend && npm test -- --json --outputFile=test-results.json || true
+          cd ../backend && pytest tests/ --json-report --json-report-file=test-results.json || true
+
+      - name: Calculate success rate
+        run: |
+          # Parse test results
+          FRONTEND_PASS=$(cat frontend/test-results.json | jq '.numPassedTests // 0')
+          FRONTEND_TOTAL=$(cat frontend/test-results.json | jq '.numTotalTests // 0')
+          BACKEND_PASS=$(cat backend/test-results.json | jq '.passed // 0')
+          BACKEND_TOTAL=$(cat backend/test-results.json | jq '.total // 0')
+          
+          TOTAL_PASS=$((FRONTEND_PASS + BACKEND_PASS))
+          TOTAL=$((FRONTEND_TOTAL + BACKEND_TOTAL))
+          
+          if [ $TOTAL -gt 0 ]; then
+            SUCCESS_RATE=$((TOTAL_PASS * 100 / TOTAL))
+            echo "Task success rate: ${SUCCESS_RATE}% (${TOTAL_PASS}/${TOTAL} tests passed)"
+            echo "success_rate=${SUCCESS_RATE}" >> $GITHUB_OUTPUT
+            
+            if [ $SUCCESS_RATE -lt 76 ]; then
+              echo "⚠️ Below Anthropic benchmark (76%+)"
+              exit 1
+            else
+              echo "✅ Meets Anthropic benchmark (76%+)"
+            fi
+          fi
+
+  # Bug Catch Rate (PR Review Effectiveness)
+  bug-catch-metrics:
+    name: Bug Catch Rate
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Analyze PR review effectiveness
+        run: |
+          # Count bugs found in PR review vs post-merge
+          PR_COMMENTS=$(gh pr view ${{ github.event.pull_request.number }} --json comments --jq '.comments | length')
+          PR_REVIEWS=$(gh pr view ${{ github.event.pull_request.number }} --json reviews --jq '.reviews | length')
+          
+          echo "PR Comments: ${PR_COMMENTS}"
+          echo "PR Reviews: ${PR_REVIEWS}"
+          
+          # Track review effectiveness
+          echo "review_comments=${PR_COMMENTS}" >> $GITHUB_OUTPUT
+          echo "review_count=${PR_REVIEWS}" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Track bug catch rate
+        run: |
+          # This would track bugs found in review vs production
+          echo "Tracking bug catch rate..."
+          # Target: 33%+ of bugs caught in PR review
+
+  # Research Taste Improvement
+  research-taste-metrics:
+    name: Research Taste Metrics
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Analyze decision quality
+        run: |
+          # Track decision outcomes over time
+          echo "Analyzing research taste improvement..."
+          
+          # This would analyze:
+          # 1. Model upgrade success rate
+          # 2. Feature adoption rate
+          # 3. User engagement improvements
+          # 4. Clip virality scores
+          
+          echo "research_taste_score=pending" >> $GITHUB_OUTPUT
+
+  # Performance Benchmarks
+  performance-benchmarks:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run frontend benchmarks
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+          # Measure build time
+          START=$(date +%s)
+          npm run build
+          END=$(date +%s)
+          DURATION=$((END - START))
+          echo "Frontend build time: ${DURATION}s"
+          echo "frontend_build_time=${DURATION}" >> $GITHUB_OUTPUT
+
+      - name: Run backend benchmarks
+        working-directory: backend
+        run: |
+          pip install -r requirements.txt
+          # Measure API response time
+          echo "Running backend benchmarks..."
+          # pytest tests/benchmarks/ --benchmark-json=benchmark-results.json
+
+      - name: Run worker benchmarks
+        working-directory: worker
+        run: |
+          pip install -r requirements.txt
+          # Measure video processing time
+          echo "Running worker benchmarks..."
+          # pytest tests/benchmarks/ --benchmark-json=benchmark-results.json
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: |
+            frontend/benchmark-results.json
+            backend/benchmark-results.json
+            worker/benchmark-results.json
+
+  # Benchmark Report
+  benchmark-report:
+    name: Benchmark Report
+    runs-on: ubuntu-latest
+    needs: [agent-code-metrics, task-success-metrics, bug-catch-metrics, research-taste-metrics, performance-benchmarks]
+    if: always()
+    steps:
+      - name: Generate benchmark report
+        run: |
+          echo "# Benchmark Report" > benchmark-report.md
+          echo "" >> benchmark-report.md
+          echo "## Anthropic Benchmarks" >> benchmark-report.md
+          echo "" >> benchmark-report.md
+          echo "| Metric | Target | Status |" >> benchmark-report.md
+          echo "|--------|--------|--------|" >> benchmark-report.md
+          echo "| Agent Code-Writing | 80%+ | ${{ needs.agent-code-metrics.result }} |" >> benchmark-report.md
+          echo "| Task Success Rate | 76%+ | ${{ needs.task-success-metrics.result }} |" >> benchmark-report.md
+          echo "| Bug Catch Rate | 33%+ | ${{ needs.bug-catch-metrics.result }} |" >> benchmark-report.md
+          echo "| Research Taste | Improving | ${{ needs.research-taste-metrics.result }} |" >> benchmark-report.md
+          echo "" >> benchmark-report.md
+          echo "## Performance Benchmarks" >> benchmark-report.md
+          echo "- Performance: ${{ needs.performance-benchmarks.result }}" >> benchmark-report.md
+          echo "" >> benchmark-report.md
+          echo "Generated: $(date)" >> benchmark-report.md
+
+      - name: Upload benchmark report
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-report
+          path: benchmark-report.md

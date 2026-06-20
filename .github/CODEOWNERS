@@ -1,0 +1,37 @@
+# Default owner for everything
+* @iadanish
+
+# Frontend
+/frontend/ @iadanish
+/frontend/src/ @iadanish
+/frontend/tests/ @iadanish
+
+# Backend
+/backend/ @iadanish
+/backend/app/ @iadanish
+/backend/tests/ @iadanish
+
+# Worker
+/worker/ @iadanish
+/worker/clip_processor/ @iadanish
+/worker/tests/ @iadanish
+
+# Documentation
+/docs/ @iadanish
+/docs/security-architecture/ @iadanish
+/docs/compliance-legal/ @iadanish
+
+# CI/CD
+/.github/ @iadanish
+/.github/workflows/ @iadanish
+
+# Infrastructure
+/infrastructure/ @iadanish
+/docker-compose.yml @iadanish
+/Dockerfile @iadanish
+
+# Security-sensitive files
+.env.example @iadanish
+.env.production @iadanish
+*.key @iadanish
+*.pem @iadanish

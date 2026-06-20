@@ -1,0 +1,130 @@
+version: 2
+updates:
+  # Frontend npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "frontend"
+    reviewers:
+      - "iadanish"
+    commit-message:
+      prefix: "chore(deps):"
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "next"
+      testing:
+        patterns:
+          - "vitest"
+          - "jest"
+          - "@testing-library/*"
+          - "playwright"
+      ui:
+        patterns:
+          - "tailwindcss"
+          - "@radix-ui/*"
+          - "lucide-react"
+
+  # Backend pip dependencies
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "backend"
+    reviewers:
+      - "iadanish"
+    commit-message:
+      prefix: "chore(deps):"
+    groups:
+      fastapi:
+        patterns:
+          - "fastapi"
+          - "uvicorn"
+          - "pydantic"
+      database:
+        patterns:
+          - "sqlalchemy"
+          - "alembic"
+          - "psycopg2"
+      ai:
+        patterns:
+          - "openai"
+          - "whisper"
+          - "transformers"
+
+  # Worker pip dependencies
+  - package-ecosystem: "pip"
+    directory: "/worker"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "worker"
+    reviewers:
+      - "iadanish"
+    commit-message:
+      prefix: "chore(deps):"
+    groups:
+      video:
+        patterns:
+          - "ffmpeg-python"
+          - "moviepy"
+          - "opencv-python"
+      ai:
+        patterns:
+          - "whisper"
+          - "clip"
+          - "transformers"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "ci"
+    reviewers:
+      - "iadanish"
+    commit-message:
+      prefix: "ci(deps):"
+
+  # Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "docker"
+    reviewers:
+      - "iadanish"
+    commit-message:
+      prefix: "docker(deps):"

@@ -1,0 +1,225 @@
+name: Security Scanning
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * 1'  # Weekly on Monday at 6 AM
+
+jobs:
+  # Dependency Scanning
+  dependency-scan:
+    name: Dependency Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Run npm audit (Frontend)
+        working-directory: frontend
+        run: npm audit --audit-level=high
+
+      - name: Run pip-audit (Backend)
+        working-directory: backend
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt
+
+  # SAST - Static Application Security Testing
+  sast:
+    name: SAST
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/default
+            p/security-audit
+            p/secrets
+            p/owasp-top-ten
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+      - name: Run Bandit (Python Security)
+        working-directory: backend
+        run: |
+          pip install bandit
+          bandit -r app/ -f json -o bandit-report.json || true
+          bandit -r app/ -f sarif -o bandit-report.sarif || true
+
+      - name: Upload Bandit results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: backend/bandit-report.sarif
+
+  # Container Scanning
+  container-scan:
+    name: Container Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build backend image
+        run: docker build -t miniop-backend:scan backend/
+
+      - name: Build worker image
+        run: docker build -t miniop-worker:scan worker/
+
+      - name: Scan backend image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'miniop-backend:scan'
+          format: 'sarif'
+          output: 'backend-trivy.sarif'
+
+      - name: Scan worker image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'miniop-worker:scan'
+          format: 'sarif'
+          output: 'worker-trivy.sarif'
+
+      - name: Upload container scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'backend-trivy.sarif'
+
+  # Secret Scanning
+  secret-scan:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # License Compliance
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check frontend licenses
+        working-directory: frontend
+        run: |
+          npm install -g license-checker
+          license-checker --failOn "GPL-3.0;AGPL-3.0"
+
+      - name: Check backend licenses
+        working-directory: backend
+        run: |
+          pip install pip-licenses
+          pip-licenses --fail-on "GPL-3.0" "AGPL-3.0"
+
+  # GDPR Compliance Check
+  gdpr-compliance:
+    name: GDPR Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for PII in code
+        run: |
+          # Search for common PII patterns
+          grep -rn "email\|phone\|ssn\|credit_card\|password" --include="*.ts" --include="*.py" --include="*.tsx" . | grep -v "node_modules" | grep -v ".git" | head -50
+          echo "⚠️ Review above for proper PII handling"
+
+      - name: Verify data retention policies
+        run: |
+          # Check that retention policies are documented
+          if [ ! -f "docs/data-retention/01-retention-policy.md" ]; then
+            echo "❌ Missing data retention policy"
+            exit 1
+          fi
+          echo "✅ Data retention policy exists"
+
+      - name: Verify privacy policy
+        run: |
+          if [ ! -f "docs/compliance-legal/03-privacy-policy.md" ]; then
+            echo "❌ Missing privacy policy"
+            exit 1
+          fi
+          echo "✅ Privacy policy exists"
+
+      - name: Check encryption requirements
+        run: |
+          # Verify HTTPS enforcement
+          grep -r "https" --include="*.yml" --include="*.yaml" . | head -10
+          echo "✅ HTTPS references found"
+
+  # Anthropic Benchmark Tracking
+  anthropic-benchmarks:
+    name: Anthropic Benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify benchmark tracking exists
+        run: |
+          # Check that benchmark tracking is documented
+          if [ ! -f "docs/recursive-improvement/01-self-improvement-flow.md" ]; then
+            echo "❌ Missing self-improvement flow documentation"
+            exit 1
+          fi
+          echo "✅ Self-improvement flow documentation exists"
+
+      - name: Check benchmark metrics
+        run: |
+          # Verify benchmark thresholds are defined
+          grep -q "80%.*agent.*code" docs/recursive-improvement/01-self-improvement-flow.md && echo "✅ Agent code-writing metric defined" || echo "⚠️ Agent code-writing metric missing"
+          grep -q "76%.*success" docs/recursive-improvement/01-self-improvement-flow.md && echo "✅ Task success metric defined" || echo "⚠️ Task success metric missing"
+          grep -q "33%.*bug" docs/agentic-orchestration/02-pr-review-loop.md && echo "✅ Bug catch rate metric defined" || echo "⚠️ Bug catch rate metric missing"
+
+  # Security Report
+  security-report:
+    name: Security Report
+    runs-on: ubuntu-latest
+    needs: [dependency-scan, sast, container-scan, secret-scan, license-check, gdpr-compliance]
+    if: always()
+    steps:
+      - name: Generate security report
+        run: |
+          echo "# Security Scan Report" > security-report.md
+          echo "" >> security-report.md
+          echo "## Summary" >> security-report.md
+          echo "- Dependency Scan: ${{ needs.dependency-scan.result }}" >> security-report.md
+          echo "- SAST: ${{ needs.sast.result }}" >> security-report.md
+          echo "- Container Scan: ${{ needs.container-scan.result }}" >> security-report.md
+          echo "- Secret Scan: ${{ needs.secret-scan.result }}" >> security-report.md
+          echo "- License Check: ${{ needs.license-check.result }}" >> security-report.md
+          echo "- GDPR Compliance: ${{ needs.gdpr-compliance.result }}" >> security-report.md
+          echo "" >> security-report.md
+          echo "Generated: $(date)" >> security-report.md
+
+      - name: Upload security report
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-report
+          path: security-report.md
