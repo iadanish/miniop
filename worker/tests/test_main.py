@@ -1,4 +1,3 @@
-import pytest
 from clip_processor.main import process_video
 
 def test_process_video():
