@@ -53,8 +53,12 @@ Track all significant decisions here. Format: date, decision, rationale.
 **Rationale**: Keeps Phase 1 self-contained in `frontend/` without FastAPI dependency; validation helpers are unit-tested separately from I/O
 
 ## 2026-06-30: Playwright Smoke Gate
-**Decision**: Pre-push hook runs `npm run test:smoke:ci`; CI `e2e.yml` runs the same smoke suite only (no visual/a11y/lighthouse until implemented)  
-**Rationale**: Matches shipped surfaces; avoids false-red CI on missing `tests/visual/` and `.lighthouserc.json`
+**Decision**: Single orchestrator `frontend/scripts/run-smoke-gate.mjs` — one production build, external `next start`, two consecutive `test:smoke:ci` passes; wired to pre-push, `npm run test:smoke:gate`, and `e2e.yml`  
+**Rationale**: Eliminates flaky second-pass failures from missing `.next`; CI uses `fuser` on Linux instead of `npx kill-port`; Playwright `webServer` disabled when `PW_EXTERNAL_SERVER=1`
+
+## 2026-06-30: Security Dependency Baseline
+**Decision**: Frontend pins `next@14.2.35`, `vitest@3.2.6`; backend pins `fastapi@0.138.2`, `starlette@1.3.1`, `pydantic@2.11.7`; CI `npm audit --audit-level=critical` and `pip-audit` run without `continue-on-error`  
+**Rationale**: Clears critical CVEs in Next.js and Vitest UI; pip-audit green on FastAPI/Starlette chain; no softened security gates
 
 ## 2026-06-28: Landing Page Messaging Alignment
 **Decision**: Landing page emphasizes self-hostable open core first; managed cloud uses BYOK  

@@ -15,7 +15,7 @@
 |---|------|--------|-------|
 | 1.1 | Create context files (CONTEXT, TASKS, DECISIONS, CLAUDE) | [x] | Created in ses_11aea9b32ffe |
 | 1.2 | Set up Next.js with App Router, Tailwind, TypeScript | [x] | Already scaffolded |
-| 1.3 | Configure all CLIs and .env (Supabase, R2, Vercel, Cloudflare) | [x] | gh/wrangler/vercel OK; supabase CLI needs access token refresh |
+| 1.3 | Configure all CLIs and .env (Supabase, R2, Vercel, Cloudflare) | [x] | gh/wrangler/vercel/supabase OK; `ANTHROPIC_API_KEY` optional (auto-decision skips) |
 | 1.4 | Add Supabase auth (login/signup/logout) | [x] | Email/password auth with @supabase/ssr, split layout, middleware |
 | 1.5 | Create landing page + Apple-style design | [x] | Landing page audited: mobile nav, a11y, FAQ accordion, doc-aligned copy |
 | 1.6 | Create dashboard layout | [x] | `/dashboard` route with nav, stats from DB, upload CTA |
