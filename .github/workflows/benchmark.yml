@@ -69,7 +69,7 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm install --no-audit
 
       - name: Run frontend tests
         working-directory: frontend
@@ -176,7 +176,7 @@ jobs:
       - name: Run frontend benchmarks
         working-directory: frontend
         run: |
-          npm ci
+          npm install --no-audit
           npm run build
           # Measure build time
           START=$(date +%s)

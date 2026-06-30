@@ -57,7 +57,7 @@ jobs:
         if: steps.deploy.outputs.url != ''
         working-directory: frontend
         run: |
-          npm ci
+          npm install --no-audit
           npm run build
           npx playwright install --with-deps chromium
           PLAYWRIGHT_BASE_URL="${{ steps.deploy.outputs.url }}" npm run test:smoke:ci
@@ -124,5 +124,5 @@ jobs:
             echo "SUPABASE_ACCESS_TOKEN not configured — skipping migration"
             exit 0
           fi
-          npm ci
+          npm install --no-audit
           node scripts/apply-migration.mjs
