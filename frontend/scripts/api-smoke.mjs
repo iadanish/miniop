@@ -21,7 +21,7 @@ function log(line) {
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_STAGING_URL
 const anonKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_STAGING_ANON_KEY
-const baseUrl = process.env.API_SMOKE_BASE_URL ?? 'http://localhost:3000'
+const baseUrl = process.env.API_SMOKE_BASE_URL ?? 'http://127.0.0.1:3000'
 
 if (!url || !anonKey) {
   log('Missing Supabase credentials for API smoke test')
