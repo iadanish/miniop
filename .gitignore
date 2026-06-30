@@ -28,6 +28,7 @@ Thumbs.db
 # Playwright / test artifacts
 frontend/playwright-report/
 frontend/test-results/
+frontend/tests/smoke/.auth/
 frontend/tsconfig.tsbuildinfo
 
 # Local tooling (not part of repo)

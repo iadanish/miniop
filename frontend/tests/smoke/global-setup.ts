@@ -1,13 +1,37 @@
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import { config as loadEnv } from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
 
+const authDir = path.join(__dirname, '.auth')
+const credentialsPath = path.join(authDir, 'credentials.json')
+
 loadEnv({ path: path.resolve(__dirname, '../../../.env') })
 
+type SmokeCredentials = {
+  email: string
+  password: string
+}
+
+function writeCredentials(credentials: SmokeCredentials) {
+  fs.mkdirSync(authDir, { recursive: true })
+  fs.writeFileSync(credentialsPath, JSON.stringify(credentials), 'utf8')
+}
+
+export function readSmokeCredentials(): SmokeCredentials | null {
+  if (!fs.existsSync(credentialsPath)) {
+    return null
+  }
+
+  return JSON.parse(fs.readFileSync(credentialsPath, 'utf8')) as SmokeCredentials
+}
+
 export default async function globalSetup() {
-  if (process.env.PLAYWRIGHT_TEST_EMAIL && process.env.PLAYWRIGHT_TEST_PASSWORD) {
+  if (fs.existsSync(credentialsPath)) {
     return
   }
+
+  fs.mkdirSync(authDir, { recursive: true })
 
   const url =
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_STAGING_URL
@@ -16,7 +40,7 @@ export default async function globalSetup() {
     process.env.SUPABASE_STAGING_ANON_KEY
 
   if (!url || !anonKey) {
-    return
+    throw new Error('Missing Supabase URL or anon key for Playwright global setup')
   }
 
   const email = `playwright.smoke.${Date.now()}@example.com`
@@ -50,6 +74,5 @@ export default async function globalSetup() {
     throw new Error(`Smoke user could not sign in: ${signInError.message}`)
   }
 
-  process.env.PLAYWRIGHT_TEST_EMAIL = email
-  process.env.PLAYWRIGHT_TEST_PASSWORD = password
+  writeCredentials({ email, password })
 }
