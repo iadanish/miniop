@@ -48,6 +48,7 @@ export default async function globalSetup() {
 
   const authClient = createClient(url, anonKey, {
     auth: { autoRefreshToken: false, persistSession: false },
+    realtime: { enabled: false },
   })
 
   const { error: signUpError } = await authClient.auth.signUp({

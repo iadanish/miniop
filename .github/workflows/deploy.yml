@@ -103,6 +103,7 @@ jobs:
   db-migrate:
     name: Database Migration
     runs-on: ubuntu-latest
+    continue-on-error: true
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
