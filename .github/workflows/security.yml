@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: '0 6 * * 1'  # Weekly on Monday at 6 AM
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   # Dependency Scanning
   dependency-scan:
@@ -28,6 +32,7 @@ jobs:
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         if: always()
+        continue-on-error: true
         with:
           sarif_file: 'trivy-results.sarif'
 
@@ -81,6 +86,7 @@ jobs:
       - name: Upload Bandit results
         uses: github/codeql-action/upload-sarif@v3
         if: always()
+        continue-on-error: true
         with:
           sarif_file: backend/bandit-report.sarif
 
@@ -114,6 +120,7 @@ jobs:
       - name: Upload container scan results
         uses: github/codeql-action/upload-sarif@v3
         if: always()
+        continue-on-error: true
         with:
           sarif_file: 'backend-trivy.sarif'
 
