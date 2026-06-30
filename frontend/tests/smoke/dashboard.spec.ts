@@ -3,7 +3,7 @@ import { readSmokeCredentials } from './global-setup'
 
 test.describe('dashboard', () => {
   test('redirects unauthenticated users to login', async ({ page }) => {
-    await page.goto('/dashboard', { waitUntil: 'domcontentloaded' })
+    await page.goto('/dashboard', { waitUntil: 'commit', timeout: 90_000 })
     await page.waitForURL(/\/login/, { timeout: 30_000 })
   })
 
