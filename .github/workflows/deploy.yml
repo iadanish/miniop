@@ -27,7 +27,7 @@ jobs:
   deploy-staging:
     name: Deploy to Staging
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && secrets.VERCEL_TOKEN != ''
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment:
       name: staging
       url: https://staging.miniop.dev
@@ -42,21 +42,26 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install Vercel CLI
+        if: ${{ secrets.VERCEL_TOKEN != '' }}
         run: npm install -g vercel
 
       - name: Pull Vercel Environment
+        if: ${{ secrets.VERCEL_TOKEN != '' }}
         run: vercel pull --yes --environment=staging --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build
+        if: ${{ secrets.VERCEL_TOKEN != '' }}
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to Staging
         id: deploy
+        if: ${{ secrets.VERCEL_TOKEN != '' }}
         run: |
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$url" >> $GITHUB_OUTPUT
 
       - name: Run Smoke Tests
+        if: ${{ secrets.VERCEL_TOKEN != '' }}
         working-directory: frontend
         run: |
           npm ci
@@ -131,8 +136,7 @@ jobs:
   db-migrate:
     name: Database Migration
     runs-on: ubuntu-latest
-    needs: [deploy-staging]
-    if: secrets.SUPABASE_ACCESS_TOKEN != ''
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
       - uses: actions/checkout@v7
 
@@ -144,6 +148,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Apply Supabase migration
+        if: ${{ secrets.SUPABASE_ACCESS_TOKEN != '' }}
         working-directory: frontend
         run: npm ci && node scripts/apply-migration.mjs
         env:
