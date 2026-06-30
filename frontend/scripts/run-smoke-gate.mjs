@@ -21,11 +21,20 @@ function stamp(msg) {
 function killPort() {
   stamp('Killing anything on port 3000')
   try {
-    execSync('npx kill-port 3000', {
-      cwd: frontendDir,
-      stdio: 'pipe',
-      shell: true,
-    })
+    if (process.platform === 'win32') {
+      execSync('npx kill-port 3000', {
+        cwd: frontendDir,
+        stdio: 'pipe',
+        shell: true,
+        timeout: 30_000,
+      })
+    } else {
+      execSync('fuser -k 3000/tcp 2>/dev/null || true', {
+        stdio: 'pipe',
+        shell: true,
+        timeout: 10_000,
+      })
+    }
   } catch {
     /* port may already be free */
   }
