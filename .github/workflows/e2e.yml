@@ -37,7 +37,7 @@ jobs:
           CI: true
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report-${{ matrix.shard }}
@@ -45,7 +45,7 @@ jobs:
           retention-days: 30
 
       - name: Upload test artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: test-failures-${{ matrix.shard }}
@@ -78,7 +78,7 @@ jobs:
           CI: true
 
       - name: Upload visual regression results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: visual-regression
@@ -110,7 +110,7 @@ jobs:
           CI: true
 
       - name: Upload accessibility report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: accessibility-report
@@ -148,7 +148,7 @@ jobs:
           uploadArtifacts: true
 
       - name: Upload Lighthouse results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: lighthouse-results
@@ -174,7 +174,7 @@ jobs:
           echo "Generated: $(date)" >> e2e-report.md
 
       - name: Upload E2E report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: e2e-report
           path: e2e-report.md
