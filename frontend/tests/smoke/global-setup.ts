@@ -1,12 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { config as loadEnv } from 'dotenv'
-import { createClient, type SupabaseClientOptions } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js'
 import ws from 'ws'
-
-type RealtimeTransport = NonNullable<
-  NonNullable<SupabaseClientOptions['realtime']>['transport']
->
 
 const authDir = path.join(__dirname, '.auth')
 const credentialsPath = path.join(authDir, 'credentials.json')
@@ -53,7 +49,7 @@ export default async function globalSetup() {
 
   const authClient = createClient(url, anonKey, {
     auth: { autoRefreshToken: false, persistSession: false },
-    realtime: { transport: ws as RealtimeTransport },
+    realtime: { transport: ws as never },
   })
 
   const { error: signUpError } = await authClient.auth.signUp({
