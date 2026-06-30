@@ -27,7 +27,11 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          # Analyze PR and make decision
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "ANTHROPIC_API_KEY not configured — skipping PR decision agent"
+            echo "decision=skip" >> $GITHUB_OUTPUT
+            exit 0
+          fi
           DECISION=$(node scripts/pr-decision-agent.mjs)
           echo "decision=$DECISION" >> $GITHUB_OUTPUT
 
@@ -85,7 +89,11 @@ jobs:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
-          # Analyze issue and make decision
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "ANTHROPIC_API_KEY not configured — skipping issue decision agent"
+            echo "decision=skip" >> $GITHUB_OUTPUT
+            exit 0
+          fi
           DECISION=$(node scripts/issue-decision-agent.mjs)
           echo "decision=$DECISION" >> $GITHUB_OUTPUT
 
@@ -146,11 +154,16 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          # Run comprehensive health check
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "ANTHROPIC_API_KEY not configured — skipping scheduled health check"
+            echo "report=skipped" >> $GITHUB_OUTPUT
+            exit 0
+          fi
           REPORT=$(node scripts/health-check-agent.mjs)
           echo "report=$REPORT" >> $GITHUB_OUTPUT
 
       - name: Create health report issue
+        if: steps.health.outputs.report != 'skipped'
         uses: actions/github-script@v7
         with:
           script: |

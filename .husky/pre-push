@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-cd frontend && sh scripts/run-smoke-gate.sh
+cd frontend && node scripts/run-smoke-gate.mjs

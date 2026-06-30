@@ -5,6 +5,8 @@ const baseURL =
   process.env.BASE_URL ??
   'http://127.0.0.1:3000'
 
+const useExternalServer = !!process.env.PW_EXTERNAL_SERVER
+
 export default defineConfig({
   globalSetup: './tests/smoke/global-setup.ts',
   testDir: './tests',
@@ -25,14 +27,18 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  webServer: {
-    command: process.env.CI
-      ? 'npx next start -H 127.0.0.1 -p 3000'
-      : 'npx next dev -H 127.0.0.1 -p 3000',
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 300_000,
-    stdout: 'pipe',
-    stderr: 'pipe',
-  },
+  ...(useExternalServer
+    ? {}
+    : {
+        webServer: {
+          command: process.env.CI
+            ? 'npx next start -H 127.0.0.1 -p 3000'
+            : 'npx next dev -H 127.0.0.1 -p 3000',
+          url: baseURL,
+          reuseExistingServer: !process.env.CI,
+          timeout: 300_000,
+          stdout: 'pipe',
+          stderr: 'pipe',
+        },
+      }),
 })

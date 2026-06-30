@@ -204,6 +204,12 @@ jobs:
           echo "Running worker benchmarks..."
           # pytest tests/benchmarks/ --benchmark-json=benchmark-results.json
 
+      - name: Record benchmark placeholders
+        run: |
+          echo '{"status":"pending"}' > frontend/benchmark-results.json
+          echo '{"status":"pending"}' > backend/benchmark-results.json
+          echo '{"status":"pending"}' > worker/benchmark-results.json
+
       - name: Upload benchmark results
         uses: actions/upload-artifact@v7
         with:
@@ -212,7 +218,6 @@ jobs:
             frontend/benchmark-results.json
             backend/benchmark-results.json
             worker/benchmark-results.json
-          if-no-files-found: ignore
 
   # Benchmark Report
   benchmark-report:

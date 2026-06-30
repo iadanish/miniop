@@ -30,9 +30,8 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Upload Trivy scan results to GitHub Security tab
+        if: github.event.repository.private == true
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        continue-on-error: true
         with:
           sarif_file: 'trivy-results.sarif'
 
@@ -50,14 +49,12 @@ jobs:
       - name: Run npm audit (Frontend)
         working-directory: frontend
         run: npm audit --audit-level=critical
-        continue-on-error: true
 
       - name: Run pip-audit (Backend)
         working-directory: backend
-        continue-on-error: true
         run: |
           pip install pip-audit
-          pip-audit -r requirements.txt || true
+          pip-audit -r requirements.txt
 
   # SAST - Static Application Security Testing
   sast:
@@ -68,7 +65,6 @@ jobs:
 
       - name: Run Semgrep
         uses: returntocorp/semgrep-action@v1
-        continue-on-error: true
         with:
           config: >-
             p/ci
@@ -84,9 +80,8 @@ jobs:
           bandit -r app/ -f sarif -o bandit-report.sarif || true
 
       - name: Upload Bandit results
+        if: github.event.repository.private == true
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        continue-on-error: true
         with:
           sarif_file: backend/bandit-report.sarif
 
@@ -118,9 +113,8 @@ jobs:
           output: 'worker-trivy.sarif'
 
       - name: Upload container scan results
+        if: github.event.repository.private == true
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        continue-on-error: true
         with:
           sarif_file: 'backend-trivy.sarif'
 
