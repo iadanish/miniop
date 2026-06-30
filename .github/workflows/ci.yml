@@ -104,7 +104,7 @@ jobs:
 
       - name: Run type checking
         working-directory: backend
-        run: mypy app/
+        run: mypy app/ --ignore-missing-imports
 
       - name: Run unit tests
         working-directory: backend

@@ -24,3 +24,14 @@ Thumbs.db
 
 # Cache
 .cache/
+
+# Playwright / test artifacts
+frontend/playwright-report/
+frontend/test-results/
+frontend/tsconfig.tsbuildinfo
+
+# Local tooling (not part of repo)
+terminals/
+mcps/
+.commandcode/
+.mimocode/
