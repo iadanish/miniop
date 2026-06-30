@@ -10,9 +10,21 @@ const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_STAGING
 const key =
   process.env.SUPABASE_STAGING_SERVICE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY
 
+if (!url || !key) {
+  console.error('Missing Supabase URL or service key')
+  process.exit(1)
+}
+
 const supabase = createClient(url, key)
+const results = {}
 
 for (const table of ['profiles', 'videos', 'clips']) {
   const { error } = await supabase.from(table).select('id').limit(1)
-  console.log(table, error ? error.message : 'ok')
+  results[table] = error ? error.message : 'ok'
+}
+
+console.log(JSON.stringify(results, null, 2))
+
+if (Object.values(results).some((value) => value !== 'ok')) {
+  process.exit(1)
 }

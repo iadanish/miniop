@@ -40,6 +40,10 @@ Track all significant decisions here. Format: date, decision, rationale.
 **Decision**: Adopt Apple-inspired minimalist design across the entire UI  
 **Rationale**: Clean typography, lots of whitespace, subtle gray backgrounds, rounded corners, black/white/gray palette with minimal accents. Applied to landing page, auth pages, and dashboard.
 
+## 2026-06-30: Staging Supabase Project Alignment
+**Decision**: MiniOp staging uses Supabase project `vnzoksaiowqwaukmtbsi` (LittleOS Staging) with publishable/secret API keys (legacy JWT keys disabled)  
+**Rationale**: CLI-linked staging project matches accessible Management API token; migration and API smoke verified end-to-end on this project
+
 ## 2026-06-30: Canonical Dashboard Path
 **Decision**: Dashboard lives at `/dashboard` (not route-group `/`); landing stays public at `/`  
 **Rationale**: Fixes redirect mismatch from login/callback; enables Playwright smoke tests and protected layout

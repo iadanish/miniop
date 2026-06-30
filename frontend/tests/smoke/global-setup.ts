@@ -11,46 +11,35 @@ export default async function globalSetup() {
 
   const url =
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_STAGING_URL
-  const serviceKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ??
-    process.env.SUPABASE_STAGING_SERVICE_KEY
-
-  if (!url || !serviceKey) {
-    return
-  }
-
-  const admin = createClient(url, serviceKey, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  })
-
-  const email = `playwright.smoke.${Date.now()}@example.com`
-  const password = `SmokeTest!${Date.now().toString(36)}`
-
-  const { error: createError } = await admin.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-    user_metadata: {
-      plan: 'free',
-      upload_quota_seconds: 300,
-    },
-  })
-
-  if (createError) {
-    throw new Error(`Failed to create Playwright smoke user: ${createError.message}`)
-  }
-
   const anonKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
     process.env.SUPABASE_STAGING_ANON_KEY
 
-  if (!anonKey) {
-    throw new Error('Missing Supabase anon key for smoke login verification')
+  if (!url || !anonKey) {
+    return
   }
+
+  const email = `playwright.smoke.${Date.now()}@example.com`
+  const password = `SmokeTest!${Date.now().toString(36)}`
 
   const authClient = createClient(url, anonKey, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
+
+  const { error: signUpError } = await authClient.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        plan: 'free',
+        upload_quota_seconds: 300,
+      },
+    },
+  })
+
+  if (signUpError) {
+    throw new Error(`Failed to create Playwright smoke user: ${signUpError.message}`)
+  }
 
   const { error: signInError } = await authClient.auth.signInWithPassword({
     email,

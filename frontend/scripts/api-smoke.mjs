@@ -19,39 +19,33 @@ function log(line) {
 }
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_STAGING_URL
-const serviceKey =
-  process.env.SUPABASE_STAGING_SERVICE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY
 const anonKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_STAGING_ANON_KEY
 const baseUrl = process.env.API_SMOKE_BASE_URL ?? 'http://localhost:3000'
 
-if (!url || !serviceKey || !anonKey) {
+if (!url || !anonKey) {
   log('Missing Supabase credentials for API smoke test')
   process.exit(1)
 }
 
-const admin = createClient(url, serviceKey, {
-  auth: { autoRefreshToken: false, persistSession: false },
-})
-
 const email = `api.smoke.${Date.now()}@example.com`
 const password = `ApiSmoke!${Date.now().toString(36)}`
-
-const { error: createError } = await admin.auth.admin.createUser({
-  email,
-  password,
-  email_confirm: true,
-})
-
-if (createError) {
-  log(`CREATE_USER_ERROR: ${createError.message}`)
-  fs.writeFileSync(logPath, lines.join('\n'))
-  process.exit(1)
-}
 
 const auth = createClient(url, anonKey, {
   auth: { autoRefreshToken: false, persistSession: false },
 })
+
+const { error: signUpError } = await auth.auth.signUp({
+  email,
+  password,
+  options: { data: { plan: 'free', upload_quota_seconds: 300 } },
+})
+
+if (signUpError) {
+  log(`SIGN_UP_ERROR: ${signUpError.message}`)
+  fs.writeFileSync(logPath, lines.join('\n'))
+  process.exit(1)
+}
 
 const { data: signInData, error: signInError } =
   await auth.auth.signInWithPassword({ email, password })

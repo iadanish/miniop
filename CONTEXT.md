@@ -11,7 +11,7 @@ MiniOp is an open-source Opus Clip clone — an AI-powered video clipping tool. 
 - **Apple-style design system** — White/gray/black palette, generous spacing, rounded-full CTAs; applied across landing, auth, and dashboard pages
 - **Playwright smoke tests** — `frontend/tests/smoke/` covers landing, login, and authenticated dashboard; gated on pre-push
 - **All CLIs configured and verified:**
-  - Supabase CLI: logged in via access token, linked to staging (`gjeymxxhrggsxytzbiur`)
+  - Supabase CLI: staging linked to `vnzoksaiowqwaukmtbsi` (LittleOS Staging, eu-west-1); migrations applied via Management API
   - Wrangler CLI: connected, R2 bucket `miniops` confirmed
   - Vercel CLI: connected (`liquidfinance` account)
 - **All .env keys filled** — no placeholders remaining

@@ -20,7 +20,7 @@
 | 1.5 | Create landing page + Apple-style design | [x] | Landing page audited: mobile nav, a11y, FAQ accordion, doc-aligned copy |
 | 1.6 | Create dashboard layout | [x] | `/dashboard` route with nav, stats from DB, upload CTA |
 | 1.7 | Build video upload page | [x] | `/dashboard/upload` with validation + R2-backed API |
-| 1.8 | Set up Supabase database schema (users, videos, clips) | [!] | Migration SQL committed; apply blocked until `SUPABASE_DB_PASSWORD` or `supabase login` works |
+| 1.8 | Set up Supabase database schema (users, videos, clips) | [x] | Migration applied to staging `vnzoksaiowqwaukmtbsi`; profiles/videos/clips tables + RLS verified |
 | 1.9 | Basic API routes for video CRUD | [x] | `/api/videos`, `/api/videos/upload`, `/api/videos/[id]` |
 | 1.10 | Playwright smoke tests + pre-push gate | [x] | 5 smoke specs, 2 consecutive green runs |
 
@@ -46,4 +46,4 @@
 ---
 
 ## Next Action
-**1.8** — Apply `supabase/migrations/20260630000000_phase1_foundation.sql` to staging (`npm run db:apply --prefix frontend` after fixing DB password)
+**2.1** — Whisper transcription integration (Phase 2)
