@@ -1,5 +1,8 @@
 # Production Costs: Scaling MiniOp Beyond Free Tiers
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 When free-tier limits become daily blockers — GPU sessions unavailable, storage full, bandwidth capped — it is time to move to paid infrastructure. This document provides real cost estimates for running MiniOp in production at three scale levels: hobby (100 clips/day), startup (1,000 clips/day), and growth (10,000 clips/day).
 
 ## Scale Level 1: Hobby — 100 Clips/Day

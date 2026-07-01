@@ -1,5 +1,8 @@
 # Roadmap — MiniOp
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Roadmap Philosophy
 
 MiniOp's roadmap is organized into quarterly themes. Each theme has a clear outcome — not a feature list. Features are selected and prioritized based on user feedback, technical dependencies, and market positioning. The roadmap is a living document updated monthly based on community input and business metrics.

@@ -1,5 +1,8 @@
 # MiniOp Dependency Management Policy
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 MiniOp is a video processing platform that relies on a complex dependency tree spanning video encoding libraries, machine learning inference runtimes, cloud storage SDKs, and web framework components. This policy defines how dependencies are evaluated, approved, tracked, and retired across both the free-tier single-node deployment and scaled production environments running on Kubernetes.

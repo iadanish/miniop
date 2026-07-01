@@ -1,5 +1,8 @@
 # MiniOp Terms of Service
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 **Effective Date:** January 1, 2026  
 **Last Updated:** January 1, 2026  
 **Version:** 1.0

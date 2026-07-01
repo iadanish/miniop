@@ -180,7 +180,13 @@ function main() {
     process.exit(1)
   }
 
-  lines.push('**PASS:** shipped surfaces OK; pipeline claims tagged or listed for Phase 2+.')
+  if (needsReview > 0) {
+    lines.push(`**FAIL:** ${needsReview} pipeline claim(s) lack Phase 2+ banner — run scripts/doc-phase-banner.mjs`)
+    fs.writeFileSync(path.join(scratchDir, 'doc-audit.md'), lines.join('\n'), 'utf8')
+    process.exit(1)
+  }
+
+  lines.push('**PASS:** shipped surfaces OK; all pipeline claims tagged Phase 2+.')
   fs.writeFileSync(path.join(scratchDir, 'doc-audit.md'), lines.join('\n'), 'utf8')
 }
 

@@ -1,5 +1,8 @@
 # Market Analysis — MiniOp
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Market Overview
 
 The short-form video market is the fastest-growing content category. TikTok, Instagram Reels, and YouTube Shorts collectively have over 3 billion monthly active users. The demand for repurposing long-form content into short-form clips is driven by a simple economic reality: creators and businesses produce long-form content (podcasts, webinars, streams, courses) but need short-form content for distribution.

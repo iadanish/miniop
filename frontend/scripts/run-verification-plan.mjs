@@ -13,12 +13,22 @@ import {
   defaultScratch,
   ensureScratch,
   killPort,
+  readDevServerEvidence,
   runCommandWithLog,
   stamp,
   startDevServer,
   stopServer,
   waitForServer,
 } from './verification-lib.mjs'
+
+function devServerHeader(scratchDir) {
+  return [
+    '=== Dev server evidence (npm run dev, external) ===',
+    readDevServerEvidence(scratchDir),
+    '=== Playwright smoke (against running dev server) ===',
+    '',
+  ].join('\n')
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const frontendDir = path.resolve(__dirname, '..')
@@ -79,6 +89,7 @@ async function step3_smokeDev() {
       'command: npm run dev (external) + npx playwright test tests/smoke --grep-invert "API CRUD via request"',
       `baseURL: ${baseUrl}`,
       '',
+      devServerHeader(scratchDir),
     ].join('\n')
     await runCommandWithLog({
       command: 'npx',
@@ -217,7 +228,7 @@ async function main() {
 
     killPort(frontendDir)
     clearAuthCache(frontendDir)
-    server = startDevServer(frontendDir)
+    server = startDevServer(frontendDir, scratchDir)
     await waitForServer()
 
     await step3_smokeDev()

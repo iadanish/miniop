@@ -1,5 +1,8 @@
 # Compliance Logging for MiniOp
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 MiniOp handles user-uploaded video content, generates AI-derived clips, processes payment information, and stores personal data. Compliance logging ensures that every data-handling operation is recorded in a way that satisfies regulatory requirements including GDPR, SOC 2 Type II, and CCPA.

@@ -1,5 +1,8 @@
 # Data Protection and Encryption
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 MiniOp processes sensitive user data: video files, email addresses, OAuth tokens, payment information, and AI-generated clip metadata. This document defines how data is classified, encrypted at rest and in transit, stored, and destroyed across the free tier (Supabase managed infrastructure) and scaled production (self-hosted or dedicated infrastructure).

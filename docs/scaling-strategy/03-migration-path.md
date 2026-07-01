@@ -1,5 +1,8 @@
 # Migration Path: Free Tier to Production
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 This document provides step-by-step migration procedures for moving MiniOp from the free tier stack (Colab + Supabase Free + Vercel Hobby + R2 Free) to the production stack (GPU Workers + Supabase Pro + Vercel Pro + Cloudflare Workers). Each section covers one component with rollback procedures.

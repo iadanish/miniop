@@ -1,5 +1,8 @@
 # MiniOp Communication
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 This document defines communication practices for MiniOp — how teams share information, make decisions, handle incidents, and maintain alignment. It covers Slack structure, meeting cadences, documentation standards, RFC processes, and async-first workflows that scale from a 3-person startup to a 40-person organization.

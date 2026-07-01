@@ -1,5 +1,8 @@
 # MiniOp Development Workflow
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 This document defines the development workflow for MiniOp, covering branch strategies, CI/CD pipelines, code review, testing, and deployment processes. It scales from a 3-person free-tier team shipping from a monorepo to a 30+ person organization with independent services and automated quality gates.

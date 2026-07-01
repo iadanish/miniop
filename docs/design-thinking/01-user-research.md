@@ -1,5 +1,8 @@
 # MiniOp User Research
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 MiniOp is an AI-powered video repurposing platform that transforms long-form video content into short, viral-ready clips for social media distribution. This document outlines user research methodology, findings, and implementation strategies for both a free-tier MVP and scaled production deployment.

@@ -1,5 +1,8 @@
 # Optimization Strategy
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 This document defines the performance optimization strategy for MiniOp across two deployment profiles: **Free Tier** (single server, sub-100 concurrent users) and **Scaled Production** (multi-node, thousands of concurrent uploads and processing jobs).
 
 ---

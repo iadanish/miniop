@@ -45,19 +45,21 @@ export async function DELETE(request: Request, context: RouteContext) {
     return NextResponse.json({ error: 'Video not found.' }, { status: 404 })
   }
 
-  try {
-    await deleteObjectFromR2(video.storage_key)
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : 'Failed to delete storage object.'
-    return NextResponse.json({ error: message }, { status: 500 })
-  }
-
   const { error: deleteError } = await supabase.from('videos').delete().eq('id', id)
 
   if (deleteError) {
-    console.error('DB delete failed after R2 object removed:', deleteError.message)
     return NextResponse.json({ error: deleteError.message }, { status: 500 })
+  }
+
+  try {
+    await deleteObjectFromR2(video.storage_key)
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'R2 cleanup failed'
+    console.error('R2 orphan after DB delete:', video.storage_key, message)
+    return NextResponse.json({
+      success: true,
+      warning: 'storage_cleanup_pending',
+    })
   }
 
   return NextResponse.json({ success: true })

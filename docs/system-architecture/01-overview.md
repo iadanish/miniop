@@ -1,5 +1,8 @@
 # MiniOp System Architecture Overview
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## What MiniOp Does
 
 MiniOp is an open-source video repurposing platform that takes long-form video and produces short, viral-ready clips — similar to Opus Clip. The **target** pipeline is: transcription → scene analysis → highlight extraction → caption generation → rendering.

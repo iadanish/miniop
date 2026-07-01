@@ -1,5 +1,8 @@
 # Audit Logging Strategy for MiniOp
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 MiniOp processes video content at scale — uploading, splitting, transcoding, and distributing clips. Every operation touches user data, billing events, and infrastructure resources. An audit logging strategy must capture who did what, when, and from where, without degrading pipeline throughput.

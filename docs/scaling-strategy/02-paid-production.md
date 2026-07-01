@@ -1,5 +1,8 @@
 # Paid Production Scaling: 3,000+ Clips/Month at $80-114/Month
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 This guide covers scaling MiniOp from free tier to production-grade at 3,000+ clips/month. The architecture replaces Colab with persistent GPU workers on affordable cloud compute, upgrades Supabase to Pro, keeps R2 for storage (cheapest at scale), and uses Cloudflare Workers for job orchestration. Total cost target: $80-114/month.

@@ -1,5 +1,8 @@
 # Free Tier Scaling: Running MiniOp at 200-500 Clips/Month for $0
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 This guide covers running MiniOp entirely on free tiers. The architecture uses Supabase Edge Functions as the API gateway (handling routing, auth, rate limiting, and job dispatch), Google Colab for GPU-intensive video processing, Cloudflare R2 for clip storage, Supabase for the database, and Vercel for the web frontend. Total cost: $0/month. Expected throughput: 200-500 clips depending on clip length and processing frequency.

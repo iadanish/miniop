@@ -1,5 +1,8 @@
 # Cost Forecasting
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 Budget alerts tell you when you've already overspent. Cost forecasting tells you when you *will*. For MiniOp — where costs scale with video uploads, transcription minutes, AI analysis tokens, and storage growth — forecasting prevents surprise bills and helps plan infrastructure budgets weeks or months in advance.
 
 ## Why Forecasting Matters for MiniOp

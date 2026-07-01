@@ -1,5 +1,8 @@
 # Vision & Mission — MiniOp
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## What MiniOp Is
 
 MiniOp is an open-source video repurposing platform that automatically identifies the most engaging moments in long-form video and generates short-form clips optimized for social media. It is a self-hostable alternative to Opus Clip, giving content creators, media companies, and marketing teams full control over their data, infrastructure, and costs.

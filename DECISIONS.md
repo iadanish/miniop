@@ -57,8 +57,8 @@ Track all significant decisions here. Format: date, decision, rationale.
 **Rationale**: Eliminates flaky second-pass failures from missing `.next`; CI uses `fuser` on Linux instead of `npx kill-port`; Playwright `webServer` disabled when `PW_EXTERNAL_SERVER=1`
 
 ## 2026-07-01: Upload/Delete Storage Ordering
-**Decision**: Upload writes R2 then DB with R2 cleanup on insert failure; delete removes R2 object first then DB row  
-**Rationale**: Failed delete returns 500 with video still listed (user can retry); avoids “delete failed” after row already removed
+**Decision**: Upload writes R2 then DB with R2 cleanup on insert failure; delete removes DB row first then R2 object  
+**Rationale**: UI reads from DB — stale rows are worse than orphan R2 blobs; if R2 cleanup fails after DB delete, API returns `{ success: true, warning: 'storage_cleanup_pending' }` and logs the orphan key
 
 ## 2026-07-01: Canonical Verification Runner
 **Decision**: `run-verification-plan.mjs` owns plan steps 1–7 with fixed log filenames; `run-smoke-gate.mjs` writes only `smoke-gate-run-*.log`  

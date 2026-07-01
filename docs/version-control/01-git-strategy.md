@@ -1,5 +1,8 @@
 # Git Strategy
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 MiniOp uses a trunk-based development model with short-lived feature branches. This document defines branch naming, merge conventions, and the Git configuration that enforces them across free-tier solo developers and scaled production teams.

@@ -1,5 +1,8 @@
 # Cost Optimization: Reducing MiniOp Infrastructure Costs
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 This document covers practical strategies to reduce MiniOp costs at every scale level. Each optimization includes the expected savings, implementation complexity, and tradeoffs.
 
 ## GPU Compute Optimizations

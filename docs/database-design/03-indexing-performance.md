@@ -1,5 +1,8 @@
 # Indexing and Performance
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 MiniOp's workload is read-heavy for the clip editing UI (timeline, transcript viewer, clip list) and write-heavy during video processing (bulk segment insertion, clip rendering status updates). This document defines the complete index strategy, query optimization patterns, and scaling approach from Supabase's free tier to production with millions of transcription segments.
 
 ## Index Strategy Overview

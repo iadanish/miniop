@@ -1,5 +1,8 @@
 # Code Review
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 Code review in MiniOp ensures correctness, security, and consistency before code reaches production. This document defines the review process, automation, standards, and practical checklists for both free-tier developers (self-review or paired review) and scaled production teams with mandatory peer review.
