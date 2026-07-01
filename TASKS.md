@@ -22,7 +22,7 @@
 | 1.7 | Build video upload page | [x] | `/dashboard/upload` + dashboard video list/delete via `/api/videos` |
 | 1.8 | Set up Supabase database schema (users, videos, clips) | [x] | Migration applied to staging `vnzoksaiowqwaukmtbsi`; profiles/videos/clips tables + RLS verified |
 | 1.9 | Basic API routes for video CRUD | [x] | `/api/videos`, `/api/videos/upload`, `/api/videos/[id]` |
-| 1.10 | Playwright smoke tests + pre-push gate | [x] | 5 smoke specs, 2 consecutive green runs |
+| 1.10 | Playwright smoke tests + pre-commit gate | [x] | 7 smoke specs (incl. API CRUD + UI delete); `run-smoke-gate.mjs` + `run-verification-plan.mjs`; CI green on `6b72306` |
 
 ## Phase 2: AI Pipeline
 > Video analysis and clip generation

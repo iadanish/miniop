@@ -64,6 +64,10 @@ Track all significant decisions here. Format: date, decision, rationale.
 **Decision**: `run-verification-plan.mjs` owns plan steps 1–7 with fixed log filenames; `run-smoke-gate.mjs` writes only `smoke-gate-run-*.log`  
 **Rationale**: Separates pre-commit gate evidence from plan-prescribed `npm run dev` + playwright logs in `smoke-run-*.log`
 
+## 2026-07-01: Smoke Auth WebSocket Transport
+**Decision**: `smoke-auth.ts` passes `ws` as Supabase realtime transport (same as `global-setup.ts`)  
+**Rationale**: Node 20 CI lacks browser WebSocket; without `ws`, API CRUD and video-crud-ui specs fail sign-in
+
 ## 2026-07-01: Middleware Auth Scope
 **Decision**: `getUser()` runs only on `/dashboard/*` and `/api/videos/*`; unauthenticated `/dashboard` requests redirect to `/login` in middleware  
 **Rationale**: Public pages skip auth roundtrip; protection is centralized before layout render
