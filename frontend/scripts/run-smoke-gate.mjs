@@ -93,9 +93,9 @@ function startServer() {
 }
 
 async function runSmokePass(passNumber) {
-  const logPath = path.join(scratchDir, `smoke-run-${passNumber}.log`)
+  const logPath = path.join(scratchDir, `smoke-gate-run-${passNumber}.log`)
   const header = [
-    stamp(`=== Smoke pass ${passNumber} ===`),
+    stamp(`=== Smoke gate pass ${passNumber} ===`),
     `command: PW_EXTERNAL_SERVER=1 CI=true npm run test:smoke:ci`,
     `baseURL: ${baseUrl}`,
     '',

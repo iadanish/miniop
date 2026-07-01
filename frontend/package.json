@@ -15,6 +15,7 @@
     "test:smoke": "playwright test tests/smoke",
     "test:smoke:ci": "playwright test tests/smoke --reporter=line",
     "test:smoke:gate": "node scripts/run-smoke-gate.mjs",
+    "test:verify": "node scripts/run-verification-plan.mjs",
     "db:apply": "node scripts/apply-migration.mjs",
     "db:check": "node scripts/check-tables.mjs"
   },

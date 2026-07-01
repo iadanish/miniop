@@ -9,8 +9,9 @@ MiniOp is an open-source Opus Clip clone — an AI-powered video clipping tool. 
 - **Auth complete** — Supabase Auth with email/password, login/signup/logout, middleware, protected dashboard
 - **Landing page complete** — Apple-style minimalist marketing page with hero, pipeline demo, product sections, pricing, FAQ, and footer
 - **Apple-style design system** — White/gray/black palette, generous spacing, rounded-full CTAs; applied across landing, auth, and dashboard pages
-- **Playwright smoke tests** — 5 specs in `frontend/tests/smoke/`; gated via `run-smoke-gate.mjs` on **pre-commit**, pre-push, and CI
-- **Dashboard video CRUD UI** — `VideoList` on `/dashboard` calls `GET /api/videos` and `DELETE /api/videos/:id`
+- **Playwright smoke tests** — specs in `frontend/tests/smoke/`; pre-commit/pre-push use `run-smoke-gate.mjs`; full plan uses `run-verification-plan.mjs`
+- **Dashboard video CRUD UI** — `VideoList` on `/dashboard` lists via `GET /api/videos` and deletes via `DELETE /api/videos/:id`; `video-crud-ui.spec.ts` exercises UI end-to-end
+- **API verification** — `api-crud.spec.ts` uses Playwright `request` fixture (writes `api-smoke.log`)
 - **Security deps patched** — `next@14.2.35`, `vitest@3.2.6`, `fastapi@0.138.2`/`starlette@1.3.1`; npm/pip audit gates enforced in CI
 - **All CLIs configured and verified:**
   - Supabase CLI: staging linked to `vnzoksaiowqwaukmtbsi` (LittleOS Staging, eu-west-1); migrations applied via Management API

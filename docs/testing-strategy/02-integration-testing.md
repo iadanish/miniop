@@ -9,7 +9,7 @@ Integration testing verifies that MiniOp's modules work correctly when connected
 
 ## Tooling
 
-**Phase 1 (shipped):** API integration is verified by `frontend/scripts/api-smoke.mjs` (real Supabase + R2 + Next.js route handlers) and Playwright smoke specs. **Phase 2+ (planned):** Vitest with Testcontainers for PostgreSQL and Supertest against the future FastAPI worker — not yet in the repo.
+**Phase 1 (shipped):** API integration is verified by `tests/smoke/api-crud.spec.ts` (Playwright `request` fixture → `api-smoke.log`) and UI smoke specs including `video-crud-ui.spec.ts`. Full plan: `npm run test:verify` (`run-verification-plan.mjs`). **Phase 2+ (planned):** Testcontainers + FastAPI Supertest — not in repo.
 
 ```bash
 pnpm add -D @testcontainers/postgresql supertest @types/supertest
