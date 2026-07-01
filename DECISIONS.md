@@ -109,9 +109,9 @@ Track all significant decisions here. Format: date, decision, rationale.
 **Decision**: Add explicit hard rule: never touch any other project memory (global or project-based), never access any other local or GitHub repo, and restrict all activity exclusively to the minio-project directory, the MiniOp GitHub repo, and the MiniOp Supabase projects (staging + prod).  
 **Rationale**: User request to enforce ironclad boundaries and prevent accidental leakage or cross-project actions even under prompt pressure.
 
-## 2026-07-01: Stag Branch for Local Merge Workflow
-**Decision**: Create and push dedicated `stag` branch to origin (`origin/stag`). All changes are committed on `stag` first, then can be merged into local `main`. Remote branch created so merges can be done from local machine.  
-**Rationale**: Directly fulfills "commit code to stag and create repo so we can merge into main from local". Provides controlled flow: stag acts as the pre-merge area. Conventional commit used. Smoke gate skipped only because this was pure docs + rules change.
+## 2026-07-01: Develop as Staging Branch for Local Merge Workflow
+**Decision**: Use the existing `develop` branch (the staging/integration branch) for committing changes before merging into local `main`. Committed rule enforcement and secrets cleanup work to `develop` via cherry-pick from temporary work, then pushed.  
+**Rationale**: User clarification: commit to the staging branch "develop" that we already have (instead of a new "stag" branch). Provides controlled flow before main. All changes now live on origin/develop.
 
 ## 2026-07-01: Secrets Removal (No Secrets in Code)
 **Decision**: Removed secret injection logic from `frontend/next.config.js` (no longer loads .env secrets at build). Replaced all example secret strings (eyJ... JWTs and keys) in documentation with safe placeholders like "your_*_key". Confirmed all runtime code already uses process.env only and .env is ignored.  
