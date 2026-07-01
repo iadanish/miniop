@@ -39,64 +39,63 @@ export default async function globalSetup() {
   const anonKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
     process.env.SUPABASE_STAGING_ANON_KEY
-  const serviceKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ??
-    process.env.SUPABASE_STAGING_SERVICE_KEY
 
   if (!url || !anonKey) {
     throw new Error('Missing Supabase URL or anon key for Playwright global setup')
   }
 
-  let email = `playwright.smoke.${Date.now()}@example.com`
-  let password = `SmokeTest!${Date.now().toString(36)}`
+  const smokeTestEmail = process.env.SMOKE_TEST_EMAIL
+  const smokeTestPassword = process.env.SMOKE_TEST_PASSWORD
+
+  let email: string
+  let password: string
 
   const authClient = createClient(url, anonKey, {
     auth: { autoRefreshToken: false, persistSession: false },
     realtime: { transport: ws as never },
   })
 
-  if (serviceKey) {
-    const adminClient = createClient(url, serviceKey, {
-      auth: { autoRefreshToken: false, persistSession: false },
-      realtime: { transport: ws as never },
-    })
-    const { error: createError } = await adminClient.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: true,
-      user_metadata: {
-        plan: 'free',
-        upload_quota_seconds: 300,
-      },
-    })
-    if (createError) {
-      throw new Error(`Failed to create Playwright smoke user: ${createError.message}`)
-    }
+  if (smokeTestEmail && smokeTestPassword) {
+    // Use pre-created test user from secrets (preferred when signups disabled)
+    email = smokeTestEmail
+    password = smokeTestPassword
   } else {
-    const { error: signUpError } = await authClient.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
+    email = `playwright.smoke.${Date.now()}@example.com`
+    password = `SmokeTest!${Date.now().toString(36)}`
+
+    const serviceKey =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ??
+      process.env.SUPABASE_STAGING_SERVICE_KEY
+
+    if (serviceKey) {
+      const adminClient = createClient(url, serviceKey, {
+        auth: { autoRefreshToken: false, persistSession: false },
+        realtime: { transport: ws as never },
+      })
+      const { error: createError } = await adminClient.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: {
           plan: 'free',
           upload_quota_seconds: 300,
         },
-      },
-    })
-    if (signUpError) {
-      if (signUpError.message.includes('Signups not allowed')) {
-        // Fall back to pre-created test user.
-        // User must create this account manually in Supabase (e.g. via Dashboard > Auth > Users)
-        // and store as GitHub secrets SMOKE_TEST_EMAIL + SMOKE_TEST_PASSWORD.
-        const fallbackEmail = process.env.SMOKE_TEST_EMAIL
-        const fallbackPassword = process.env.SMOKE_TEST_PASSWORD
-        if (fallbackEmail && fallbackPassword) {
-          email = fallbackEmail
-          password = fallbackPassword
-        } else {
-          throw new Error(`Failed to create Playwright smoke user (signups disabled and no SMOKE_TEST_* secrets): ${signUpError.message}`)
-        }
-      } else {
+      })
+      if (createError) {
+        throw new Error(`Failed to create Playwright smoke user: ${createError.message}`)
+      }
+    } else {
+      const { error: signUpError } = await authClient.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            plan: 'free',
+            upload_quota_seconds: 300,
+          },
+        },
+      })
+      if (signUpError) {
         throw new Error(`Failed to create Playwright smoke user: ${signUpError.message}`)
       }
     }
