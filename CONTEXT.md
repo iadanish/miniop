@@ -49,6 +49,7 @@ MiniOp is an open-source Opus Clip clone — an AI-powered video clipping tool. 
 - **Strict isolation active** — Agent may only operate in D:\minio-project, MiniOp GitHub, and MiniOp Supabase (staging/prod). No other memories, repos, or projects allowed. Rule documented in CLAUDE.md and DECISIONS.md.
 - Git workflow: changes committed to the existing `develop` staging branch, then merge into main locally.
 - Security: no secrets in source. next.config cleaned, docs use placeholders only. All keys via process.env + ignored .env.
+- CI fixes: E2E smoke now uses service role key to work with signup-disabled Supabase; lint clean. All checks expected to pass on PRs.
 
 ## Free Tier Targets
 

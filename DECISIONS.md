@@ -120,3 +120,7 @@ Track all significant decisions here. Format: date, decision, rationale.
 ## 2026-07-01: Merge Conflict Resolution (develop vs main)
 **Decision**: Merged origin/main into develop, resolved all add/add and content conflicts listed by GitHub (17 files). Kept develop's versions for security/boundary work (next.config.js, CONTEXT.md, DECISIONS.md, TASKS.md, cleaned docs). Took main's versions for packages, workflows, backend, and frontend code. Committed as merge resolution and pushed.  
 **Rationale**: GitHub reported "This branch has conflicts" + 12 failing checks on develop. Resolving allows clean merge path from develop (staging) into main. Branch is now up-to-date on GitHub.
+
+## 2026-07-01: Fix E2E Smoke Gate for CI Checks
+**Decision**: Added SUPABASE_STAGING_SERVICE_KEY to .github/workflows/e2e.yml so the smoke global-setup uses admin.createUser (bypasses signup disabled on the Supabase instance). Also fixed 2 eslint warnings (unused React import, explicit any in vitest config) that appeared post-merge. New commit f63e194 on develop.  
+**Rationale**: E2E/Playwright Smoke Tests was failing every PR ("Failed to create Playwright smoke user: Signups not allowed"). With service key, the test setup succeeds using admin API. Combined with merge resolution, all checks should now pass on commits/PRs to develop.

@@ -61,3 +61,4 @@
 - [x] Committed rule + secrets cleanup work to the existing `develop` staging branch (pushed to origin/develop). Ready to merge `develop` → `main` from local.
 - [x] Removed all secret references from code: cleaned next.config.js injection + redacted example keys in docs (chore(security) commit on develop).
 - [x] Resolved merge conflicts from main into develop (17 files including workflows, packages, backend, frontend, docs). Pushed clean develop. GitHub conflicts banner should be gone.
+- [x] Fixed E2E smoke gate (added SUPABASE_STAGING_SERVICE_KEY to e2e.yml for admin user creation) + cleaned 2 lint warnings. New commit on develop so all PR checks pass.
