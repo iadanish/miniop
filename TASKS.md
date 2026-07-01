@@ -60,3 +60,4 @@
 - [x] Added strict boundary rule: no other project memories (global/project), no other repos (local/GitHub), only minio-project + MiniOp GitHub + MiniOp Supabase projects. Updated CLAUDE.md, DECISIONS.md, CONTEXT.md, and project memory files.
 - [x] Committed rule + secrets cleanup work to the existing `develop` staging branch (pushed to origin/develop). Ready to merge `develop` → `main` from local.
 - [x] Removed all secret references from code: cleaned next.config.js injection + redacted example keys in docs (chore(security) commit on develop).
+- [x] Resolved merge conflicts from main into develop (17 files including workflows, packages, backend, frontend, docs). Pushed clean develop. GitHub conflicts banner should be gone.

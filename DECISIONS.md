@@ -116,4 +116,7 @@ Track all significant decisions here. Format: date, decision, rationale.
 ## 2026-07-01: Secrets Removal (No Secrets in Code)
 **Decision**: Removed secret injection logic from `frontend/next.config.js` (no longer loads .env secrets at build). Replaced all example secret strings (eyJ... JWTs and keys) in documentation with safe placeholders like "your_*_key". Confirmed all runtime code already uses process.env only and .env is ignored.  
 **Rationale**: Reinforce "Never put secrets in repo". Hardens security posture for MiniOp GitHub repo. All actual credentials stay exclusively in local .env + platform secret stores (Vercel, GitHub Secrets).
-**Rationale**: User request to enforce ironclad boundaries and prevent accidental leakage or cross-project actions even under prompt pressure. Supersedes and strengthens prior MiniOp-Only Boundary. This rule is now in CLAUDE.md and must be respected in all future sessions.
+
+## 2026-07-01: Merge Conflict Resolution (develop vs main)
+**Decision**: Merged origin/main into develop, resolved all add/add and content conflicts listed by GitHub (17 files). Kept develop's versions for security/boundary work (next.config.js, CONTEXT.md, DECISIONS.md, TASKS.md, cleaned docs). Took main's versions for packages, workflows, backend, and frontend code. Committed as merge resolution and pushed.  
+**Rationale**: GitHub reported "This branch has conflicts" + 12 failing checks on develop. Resolving allows clean merge path from develop (staging) into main. Branch is now up-to-date on GitHub.
