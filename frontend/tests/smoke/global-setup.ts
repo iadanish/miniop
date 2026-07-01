@@ -55,17 +55,38 @@ export default async function globalSetup() {
     realtime: { transport: ws as never },
   })
 
+  const serviceKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ??
+    process.env.SUPABASE_STAGING_SERVICE_KEY
+
   if (smokeTestEmail && smokeTestPassword) {
-    // Use pre-created test user from secrets (preferred when signups disabled)
+    // Prefer pre-created test user from GitHub secrets when provided
+    // (avoids signup disabled and invalid key issues)
     email = smokeTestEmail
     password = smokeTestPassword
+
+    if (serviceKey) {
+      // Use admin to ensure/create the exact test user (bypasses signup)
+      const adminClient = createClient(url, serviceKey, {
+        auth: { autoRefreshToken: false, persistSession: false },
+        realtime: { transport: ws as never },
+      })
+      const { error: createError } = await adminClient.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: {
+          plan: 'free',
+          upload_quota_seconds: 300,
+        },
+      })
+      if (createError && !/already|registered|exists/i.test(createError.message)) {
+        throw new Error(`Failed to create Playwright smoke user: ${createError.message}`)
+      }
+    }
   } else {
     email = `playwright.smoke.${Date.now()}@example.com`
     password = `SmokeTest!${Date.now().toString(36)}`
-
-    const serviceKey =
-      process.env.SUPABASE_SERVICE_ROLE_KEY ??
-      process.env.SUPABASE_STAGING_SERVICE_KEY
 
     if (serviceKey) {
       const adminClient = createClient(url, serviceKey, {
