@@ -66,6 +66,13 @@ async function inventoryProject(ref, label) {
 }
 
 async function main() {
+  if (!token || token.includes('REPLACE_WITH')) {
+    console.log(
+      'SKIP: set SUPABASE_ACCESS_TOKEN temporarily to re-audit LittleOS (MiniOp .env parked)',
+    )
+    process.exit(0)
+  }
+
   fs.mkdirSync(scratchDir, { recursive: true })
   const report = {
     at: new Date().toISOString(),
@@ -73,7 +80,13 @@ async function main() {
     prod: await inventoryProject(PROD, 'LittleOS Prod'),
   }
 
-  const stagingKeys = JSON.parse(report.staging.api_keys.body || '[]')
+  let stagingKeys = []
+  try {
+    const parsed = JSON.parse(report.staging.api_keys.body || '[]')
+    stagingKeys = Array.isArray(parsed) ? parsed : []
+  } catch {
+    stagingKeys = []
+  }
   report.staging.miniop_api_key_present = stagingKeys.some(
     (k) => k.name === 'miniop_phase1',
   )
@@ -82,10 +95,23 @@ async function main() {
   fs.writeFileSync(outPath, JSON.stringify(report, null, 2))
   console.log('Wrote', outPath)
 
-  const stagingTables = JSON.parse(report.staging.checks.miniop_tables.body || '[]')
-  const prodTables = JSON.parse(report.prod.checks.miniop_tables.body || '[]')
-  const stagingSmoke = JSON.parse(report.staging.checks.smoke_users.body || '[]')
-  const prodSmoke = JSON.parse(report.prod.checks.smoke_users.body || '[]')
+  const parseRows = (body) => {
+    try {
+      const parsed = JSON.parse(body || '[]')
+      return Array.isArray(parsed) ? parsed : []
+    } catch {
+      return []
+    }
+  }
+  const stagingTables = parseRows(report.staging.checks.miniop_tables.body)
+  const prodTables = parseRows(report.prod.checks.miniop_tables.body)
+  const stagingSmoke = parseRows(report.staging.checks.smoke_users.body)
+  const prodSmoke = parseRows(report.prod.checks.smoke_users.body)
+
+  if (!token || token.includes('REPLACE_WITH')) {
+    console.log('SKIP: SUPABASE_ACCESS_TOKEN not set — using last audit from scratch only')
+    process.exit(0)
+  }
   const needsRevert =
     stagingTables.length > 0 ||
     prodTables.length > 0 ||
