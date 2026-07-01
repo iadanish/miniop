@@ -124,3 +124,7 @@ Track all significant decisions here. Format: date, decision, rationale.
 ## 2026-07-01: Fix E2E Smoke Gate for CI Checks
 **Decision**: Added support for SMOKE_TEST_EMAIL / SMOKE_TEST_PASSWORD fallback in global-setup.ts and e2e.yml (in addition to service role key). User will manually create the account in Supabase using provided credentials and store only as GitHub secrets (no values in repo).  
 **Rationale**: Signups are disabled on the target Supabase instance. Service key may not always be exposed in CI for security. Fallback allows reliable authenticated smoke tests using a pre-created user.
+
+## 2026-07-01: Mitigate 219 Code Scanning Alerts
+**Decision**: Addressed bulk of Trivy-based code scanning alerts (package vulns in Docker images) by: switching to python:3.12-slim base (newer patches), upgrading pip/setuptools/wheel in Dockerfiles, adding .trivyignore, filtering scans to CRITICAL/HIGH + ignore-unfixed. We do not fix every low-severity or base-image CVE in source (not practical); focus on high ones and suppress noise. Alerts count should drop on re-scans after new image builds.  
+**Rationale**: 219+ alerts were mostly from python:3.11-slim base + deps like starlette/wheel in container scans. GitHub code scanning counts all; we mitigate actionable ones without overhauling base images. Switched base for better out-of-box security.
