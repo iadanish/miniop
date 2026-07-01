@@ -76,8 +76,8 @@ jobs:
         working-directory: backend
         run: |
           pip install bandit
-          bandit -r app/ -f json -o bandit-report.json || true
-          bandit -r app/ -f sarif -o bandit-report.sarif || true
+          bandit -r app/ -f json -o bandit-report.json
+          bandit -r app/ -f sarif -o bandit-report.sarif
 
       - name: Upload Bandit results
         if: github.event.repository.private == true

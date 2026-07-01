@@ -98,7 +98,8 @@ jobs:
             echo "success_rate=${SUCCESS_RATE}" >> $GITHUB_OUTPUT
             
             if [ $SUCCESS_RATE -lt 76 ]; then
-              echo "⚠️ Below Anthropic benchmark (76%+)"
+              echo "❌ Below Anthropic benchmark (76%+)"
+              exit 1
             else
               echo "✅ Meets Anthropic benchmark (76%+)"
             fi

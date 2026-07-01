@@ -31,6 +31,14 @@ frontend/test-results/
 frontend/tests/smoke/.auth/
 frontend/tsconfig.tsbuildinfo
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+backend/.tmp-pip/
+
 # Local tooling (not part of repo)
 terminals/
 mcps/
