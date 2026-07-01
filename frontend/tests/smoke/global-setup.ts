@@ -47,8 +47,8 @@ export default async function globalSetup() {
     throw new Error('Missing Supabase URL or anon key for Playwright global setup')
   }
 
-  const email = `playwright.smoke.${Date.now()}@example.com`
-  const password = `SmokeTest!${Date.now().toString(36)}`
+  let email = `playwright.smoke.${Date.now()}@example.com`
+  let password = `SmokeTest!${Date.now().toString(36)}`
 
   const authClient = createClient(url, anonKey, {
     auth: { autoRefreshToken: false, persistSession: false },
@@ -84,14 +84,16 @@ export default async function globalSetup() {
     })
     if (signUpError) {
       if (signUpError.message.includes('Signups not allowed')) {
-        // Fall back to pre-created test user (set SMOKE_TEST_EMAIL / PASSWORD in CI secrets or .env)
+        // Fall back to pre-created test user.
+        // User must create this account manually in Supabase (e.g. via Dashboard > Auth > Users)
+        // and store as GitHub secrets SMOKE_TEST_EMAIL + SMOKE_TEST_PASSWORD.
         const fallbackEmail = process.env.SMOKE_TEST_EMAIL
         const fallbackPassword = process.env.SMOKE_TEST_PASSWORD
         if (fallbackEmail && fallbackPassword) {
           email = fallbackEmail
           password = fallbackPassword
         } else {
-          throw new Error(`Failed to create Playwright smoke user (signups disabled and no fallback SMOKE_TEST_* secrets): ${signUpError.message}`)
+          throw new Error(`Failed to create Playwright smoke user (signups disabled and no SMOKE_TEST_* secrets): ${signUpError.message}`)
         }
       } else {
         throw new Error(`Failed to create Playwright smoke user: ${signUpError.message}`)
