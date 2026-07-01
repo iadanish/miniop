@@ -67,21 +67,26 @@ export default async function globalSetup() {
 
     if (serviceKey) {
       // Use admin to ensure/create the exact test user (bypasses signup)
-      const adminClient = createClient(url, serviceKey, {
-        auth: { autoRefreshToken: false, persistSession: false },
-        realtime: { transport: ws as never },
-      })
-      const { error: createError } = await adminClient.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: true,
-        user_metadata: {
-          plan: 'free',
-          upload_quota_seconds: 300,
-        },
-      })
-      if (createError && !/already|registered|exists/i.test(createError.message)) {
-        throw new Error(`Failed to create Playwright smoke user: ${createError.message}`)
+      // Ignore any create error (e.g. invalid key or already exists) - we just want to sign in with the provided creds
+      try {
+        const adminClient = createClient(url, serviceKey, {
+          auth: { autoRefreshToken: false, persistSession: false },
+          realtime: { transport: ws as never },
+        })
+        const { error: createError } = await adminClient.auth.admin.createUser({
+          email,
+          password,
+          email_confirm: true,
+          user_metadata: {
+            plan: 'free',
+            upload_quota_seconds: 300,
+          },
+        })
+        if (createError) {
+          console.warn('Admin create warning (will attempt signin anyway):', createError.message)
+        }
+      } catch (e: any) {
+        console.warn('Admin create exception (will attempt signin anyway):', e.message)
       }
     }
   } else {
