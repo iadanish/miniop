@@ -14,7 +14,7 @@ MiniOp is an open-source Opus Clip clone — an AI-powered video clipping tool. 
 - **API verification** — `api-crud.spec.ts` uses Playwright `request` fixture (writes `api-smoke.log`)
 - **Security deps patched** — `next@14.2.35`, `vitest@3.2.6`, `fastapi@0.138.2`/`starlette@1.3.1`; npm/pip audit gates enforced in CI
 - **All CLIs configured and verified:**
-  - Supabase: MiniOp project `pycaruihndpxznvxuqdk` only (Phase 1 migration via `supabase db push`); LittleOS refs removed
+  - Supabase: **paused** — user must supply MiniOp project ref in `.env` (LittleOS staging/prod reverted; no LittleOS creds)
   - Wrangler CLI: connected, R2 bucket `miniops` confirmed
   - Vercel CLI: connected (`liquidfinance` account)
 - **All .env keys filled** — no placeholders remaining
