@@ -1,6 +1,7 @@
 import { config as loadEnv } from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
 import path from 'path'
+import ws from 'ws'
 import { readSmokeCredentials } from '../global-setup'
 
 loadEnv({ path: path.resolve(__dirname, '../../../../.env') })
@@ -23,6 +24,7 @@ export async function getSmokeAccessToken(): Promise<string> {
 
   const client = createClient(url, anonKey, {
     auth: { autoRefreshToken: false, persistSession: false },
+    realtime: { transport: ws as never },
   })
 
   const { data, error } = await client.auth.signInWithPassword({
