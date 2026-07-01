@@ -1,5 +1,8 @@
 # MiniOp Feature Flags
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 Feature flags (also called feature toggles) are the primary mechanism for decoupling deployment from release in MiniOp. Instead of rolling back an entire deployment when a new feature causes problems, you disable the feature flag and the code path reverts to the previous behavior without redeployment.

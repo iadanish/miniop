@@ -4,13 +4,26 @@
   "description": "MiniOp - Open-source, free-tier Opus Clip clone with AI-powered video clipping",
   "private": true,
   "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "prepare": "husky install",
-    "commit": "cz"
+    "commit": "cz",
+    "db:push": "supabase db push",
+    "db:migrate": "supabase migration up",
+    "db:reset": "supabase db reset",
+    "db:types": "supabase gen types typescript --local > src/types/database.ts",
+    "r2:bucket": "wrangler r2 bucket list",
+    "r2:upload": "wrangler r2 object put",
+    "worker:dev": "wrangler dev",
+    "worker:deploy": "wrangler deploy",
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel",
+    "deploy:status": "vercel ls"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.0.0",
@@ -50,5 +63,9 @@
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@notionhq/client": "^5.22.0",
+    "dotenv": "^17.4.2"
   }
 }

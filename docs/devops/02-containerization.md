@@ -1,5 +1,8 @@
 # Containerization
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 MiniOp runs four distinct services: the FastAPI backend, the Next.js frontend, a GPU-accelerated video processing worker, and supporting infrastructure (PostgreSQL, Redis, MinIO object storage). Each service has its own Dockerfile optimized for build speed, image size, and security. This document covers container design for both free-tier single-machine deployments and production Kubernetes clusters.

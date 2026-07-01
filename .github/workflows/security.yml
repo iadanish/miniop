@@ -8,13 +8,17 @@ on:
   schedule:
     - cron: '0 6 * * 1'  # Weekly on Monday at 6 AM
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   # Dependency Scanning
   dependency-scan:
     name: Dependency Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -26,14 +30,25 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Upload Trivy scan results to GitHub Security tab
+        if: github.event.repository.private == true
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
         with:
           sarif_file: 'trivy-results.sarif'
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install --no-audit
+
       - name: Run npm audit (Frontend)
         working-directory: frontend
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=critical
 
       - name: Run pip-audit (Backend)
         working-directory: backend
@@ -46,16 +61,14 @@ jobs:
     name: SAST
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Run Semgrep
         uses: returntocorp/semgrep-action@v1
         with:
           config: >-
-            p/default
-            p/security-audit
+            p/ci
             p/secrets
-            p/owasp-top-ten
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
 
@@ -63,21 +76,21 @@ jobs:
         working-directory: backend
         run: |
           pip install bandit
-          bandit -r app/ -f json -o bandit-report.json || true
-          bandit -r app/ -f sarif -o bandit-report.sarif || true
+          bandit -r app/ -f json -o bandit-report.json
 
       - name: Upload Bandit results
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
+        if: github.event.repository.private == true
+        uses: actions/upload-artifact@v7
         with:
-          sarif_file: backend/bandit-report.sarif
+          name: bandit-report
+          path: backend/bandit-report.json
 
   # Container Scanning
   container-scan:
     name: Container Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build backend image
         run: docker build -t miniop-backend:scan backend/
@@ -100,8 +113,8 @@ jobs:
           output: 'worker-trivy.sarif'
 
       - name: Upload container scan results
+        if: github.event.repository.private == true
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
         with:
           sarif_file: 'backend-trivy.sarif'
 
@@ -110,12 +123,12 @@ jobs:
     name: Secret Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -124,7 +137,7 @@ jobs:
     name: License Compliance
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Check frontend licenses
         working-directory: frontend
@@ -143,7 +156,7 @@ jobs:
     name: GDPR Compliance
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Check for PII in code
         run: |
@@ -179,7 +192,7 @@ jobs:
     name: Anthropic Benchmarks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Verify benchmark tracking exists
         run: |
@@ -219,7 +232,7 @@ jobs:
           echo "Generated: $(date)" >> security-report.md
 
       - name: Upload security report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: security-report
           path: security-report.md

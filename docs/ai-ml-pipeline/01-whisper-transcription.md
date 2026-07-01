@@ -1,5 +1,8 @@
 # Whisper Transcription Pipeline
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 MiniOp uses OpenAI's Whisper models as the foundation of its transcription pipeline. Every video uploaded to the platform is transcribed into timestamped text segments that feed downstream clip detection, virality scoring, and subtitle generation. The pipeline must handle everything from a 30-second TikTok to a 3-hour podcast episode, and it must do so under two distinct operational modes: a free-tier self-hosted path (using whisper-base or whisper-small for lower VRAM requirements) and a horizontally scaled production path (using whisper-large-v3 for maximum accuracy).

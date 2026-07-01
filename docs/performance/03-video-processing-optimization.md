@@ -1,5 +1,8 @@
 # Video Processing Optimization
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 Video processing is the computational heart of MiniOp. Every user action — uploading, transcribing, detecting highlights, clipping, exporting — runs through FFmpeg or a Whisper model. This document details how to optimize each stage, from free-tier CPU-only processing to scaled GPU-accelerated pipelines.
 
 ---

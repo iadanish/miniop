@@ -1,5 +1,8 @@
 # Dependency Update Guide
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 MiniOp depends on a stack of runtime dependencies, native binaries, and container images. This document provides a structured approach to keeping them current without breaking your clip generation pipeline.
 
 ---

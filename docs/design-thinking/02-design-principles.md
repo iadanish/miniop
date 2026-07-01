@@ -1,5 +1,8 @@
 # MiniOp Design Principles
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 Design principles are non-negotiable constraints that guide every product decision in MiniOp. They resolve ambiguity when stakeholders disagree, speed up design reviews by providing shared vocabulary, and ensure consistency across features built by different developers. This document covers the principles themselves, how they apply at free tier versus production scale, and concrete implementation guidance.

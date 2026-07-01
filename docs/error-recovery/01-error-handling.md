@@ -1,5 +1,8 @@
 # MiniOp Error Handling Guide
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Error Taxonomy
 
 MiniOp categorizes errors by their origin and recoverability. Proper classification drives the correct recovery strategy — retrying a permanent error wastes resources, while failing fast on a transient one loses work unnecessarily.

@@ -1,5 +1,8 @@
 # Performance Maintenance Guide
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 This document covers performance monitoring, profiling, optimization, and scaling for MiniOp's clip generation pipeline. It addresses both single-machine free-tier deployments and horizontally-scaled production clusters.
 
 ---

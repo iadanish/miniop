@@ -1,5 +1,8 @@
 # Auto-Scaling — MiniOp Video Clipping Platform
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Why Auto-Scaling for Video Processing
 
 Video processing workloads are bursty by nature. A user uploads a 4-hour podcast and expects clips within minutes. During that burst, the system needs 10x the normal compute capacity. Five minutes later, the queue is empty and those expensive GPU instances should be terminated. Manual scaling can't respond fast enough — auto-scaling is essential for both cost efficiency and user experience.

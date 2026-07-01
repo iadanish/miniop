@@ -1,5 +1,8 @@
 # Budget Alerts
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 Unchecked cloud spending is the fastest way to kill an open-source project's sustainability. A single misconfigured batch job or a user uploading 500 videos can rack up thousands in API bills before anyone notices. This document covers how to implement budget alerts for MiniOp — from simple local scripts to production-grade multi-channel alerting with automatic cost controls.
 
 ## Free Tier: Script-Based Monitoring

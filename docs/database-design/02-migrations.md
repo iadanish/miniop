@@ -1,5 +1,8 @@
 # Database Migrations
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 This document covers the migration strategy for MiniOp's PostgreSQL schema on Supabase. It addresses the local development workflow, migration naming conventions, rollback patterns, data migrations, and the production deployment pipeline. Whether running the free-tier single-database setup or a scaled deployment with branching and staging environments, this guide provides the exact commands and patterns to follow.
 
 ## Migration Tool: Supabase CLI

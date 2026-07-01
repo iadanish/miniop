@@ -1,8 +1,23 @@
 # MiniOp System Architecture Overview
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## What MiniOp Does
 
-MiniOp is an open-source video repurposing platform that takes long-form video and produces short, viral-ready clips — similar to Opus Clip. It analyzes video content using AI models to identify engaging moments, ranks them by virality potential, and outputs clips with captions, reframing, and metadata. The system processes video through a multi-stage pipeline: transcription → scene analysis → highlight extraction → caption generation → rendering.
+MiniOp is an open-source video repurposing platform that takes long-form video and produces short, viral-ready clips — similar to Opus Clip. The **target** pipeline is: transcription → scene analysis → highlight extraction → caption generation → rendering.
+
+### Shipped today (Phase 1)
+
+| Surface | Implementation |
+|---------|----------------|
+| Frontend | Next.js 14 on Vercel — `/`, `/login`, `/signup`, `/dashboard`, `/dashboard/upload` |
+| Auth | Supabase Auth (email/password) + middleware session refresh |
+| API | Next.js route handlers under `/api/videos/*` |
+| Metadata DB | Supabase PostgreSQL (`profiles`, `videos`, `clips`) with RLS |
+| Object storage | Cloudflare R2 (`miniops` bucket) for source uploads |
+
+Phase 2+ components below (Edge Functions, Colab workers, clip rendering) are **planned** — not yet in the codebase.
 
 ## Free Tier Architecture (~200–500 clips/month)
 

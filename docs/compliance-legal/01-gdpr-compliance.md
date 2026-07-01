@@ -1,5 +1,8 @@
 # GDPR Compliance Guide for MiniOp
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 MiniOp processes video content uploaded by users, extracts metadata, generates AI-powered clips, and stores resulting media assets. Under the General Data Protection Regulation (EU 2016/679), this processing involves personal data at multiple stages. This document provides actionable compliance guidance for both the free-tier self-hosted deployment and scaled production environments.

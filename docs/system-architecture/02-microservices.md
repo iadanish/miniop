@@ -1,5 +1,8 @@
 # MiniOp Microservices Design
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Service Decomposition
 
 MiniOp is decomposed into six services, each deployable and scalable independently. The free tier runs most of these on serverless platforms (zero idle cost), while the scaled tier replaces GPU-bound services with persistent workers.

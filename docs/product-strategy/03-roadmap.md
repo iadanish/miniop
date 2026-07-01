@@ -1,24 +1,34 @@
 # Roadmap — MiniOp
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Roadmap Philosophy
 
 MiniOp's roadmap is organized into quarterly themes. Each theme has a clear outcome — not a feature list. Features are selected and prioritized based on user feedback, technical dependencies, and market positioning. The roadmap is a living document updated monthly based on community input and business metrics.
 
 ## Current State (Q2 2026)
 
-MiniOp has a working MVP with the following capabilities:
+**Phase 1 foundation (shipped in repo)**
 
-- Video upload (direct to S3-compatible storage)
-- Transcription via Whisper (CPU-based)
-- Basic highlight detection (speech energy + silence gap analysis)
-- Clip generation via FFmpeg (single aspect ratio)
-- Simple caption overlay (white text, bottom-center)
-- REST API for clip creation and job management
-- Docker Compose deployment
+- Landing page at `/` (Apple-style marketing)
+- Supabase email/password auth (`/login`, `/signup`, `/auth/callback`)
+- Protected dashboard at `/dashboard` with stats + upload CTA
+- Video upload UI at `/dashboard/upload` (MP4/MOV/WebM/AVI, 500 MB cap)
+- Next.js API routes: `GET/POST /api/videos`, `POST /api/videos/upload`, `GET/DELETE /api/videos/:id`
+- Cloudflare R2 storage for uploaded source files
+- Supabase schema migration for `profiles`, `videos`, `clips` with RLS (SQL in `supabase/migrations/`)
+- Playwright smoke suite + pre-commit smoke gate (`run-smoke-gate.mjs`); dashboard lists videos via `GET /api/videos` with delete
 
-**What's working**: Transcription accuracy is 95%+ for English. Clip generation produces clean cuts. API is stable.
+**Planned next (Phase 2 — not shipped)**
 
-**What's not working**: Processing is slow (1 hour video takes 30 minutes on CPU). Highlight detection is basic — misses visual cues. Only 16:9 output. No web UI yet.
+- Whisper transcription, scene detection, virality scoring
+- FFmpeg clip extraction and caption overlay
+- FastAPI worker pipeline and job queue
+
+**What's working today**: Auth flow, landing, dashboard routing, upload validation, API auth (cookie + Bearer), R2 SDK integration, CI smoke workflow.
+
+**What's not working yet**: AI clip pipeline, clip rendering, social posting, Docker GPU deployment.
 
 ## Q3 2026 — Speed and Quality
 

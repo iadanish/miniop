@@ -1,5 +1,8 @@
 # CDN Edge Caching
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 MiniOp serves video files — the heaviest content type on the internet. A 30-second 1080p clip is ~15-25 MB. Without a CDN, every user download hits your origin server, consuming bandwidth and adding latency. This document covers CDN implementation with Cloudflare across free and scaled deployments.
 
 ---

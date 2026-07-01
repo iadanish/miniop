@@ -1,5 +1,8 @@
 # Database Schema Design
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 MiniOp is an AI-powered video clipping platform that ingests long-form video, transcribes it, identifies viral-worthy segments, and exports short-form clips. This document defines the PostgreSQL schema running on Supabase, covering the free-tier single-database setup through to a scaled production deployment with partitioning and read replicas.
 
 ## Core Design Principles

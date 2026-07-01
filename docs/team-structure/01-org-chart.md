@@ -1,5 +1,8 @@
 # MiniOp Organization Chart
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 This document defines the organizational structure for MiniOp, an open-source AI-powered video clipping platform (Opus Clip clone). The structure scales from a lean founding team to a full production organization. Every role maps to specific services, repositories, and on-call responsibilities.

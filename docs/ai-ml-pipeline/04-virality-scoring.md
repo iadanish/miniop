@@ -1,5 +1,8 @@
 # Virality Scoring Pipeline
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 Virality scoring is the final ranking layer in MiniOp's AI pipeline. It takes the candidate clips produced by clip analysis and scene detection, and predicts which clips are most likely to perform well as short-form content on platforms like TikTok, YouTube Shorts, and Instagram Reels. The score combines content signals, visual signals, and platform-specific heuristics into a single 0-1 virality score.

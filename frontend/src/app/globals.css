@@ -1,0 +1,55 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+.liquid-shape {
+  animation: liquid-morph 12s ease-in-out infinite alternate;
+}
+
+.liquid-shape-delay {
+  animation-delay: -5s;
+}
+
+@keyframes liquid-morph {
+  0% {
+    border-radius: 52% 48% 40% 60% / 42% 58% 42% 58%;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    border-radius: 38% 62% 58% 42% / 60% 42% 58% 40%;
+    transform: translate3d(16px, 12px, 0) scale(1.14);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

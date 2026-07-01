@@ -1,5 +1,8 @@
 # MiniOp Prototyping Strategy
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 Prototyping at MiniOp follows a three-phase approach: validate the riskiest assumptions with disposable prototypes, build interactive prototypes for user testing, then harden into production code. This document defines the methodology, tools, timelines, and implementation details for each phase across free-tier MVP and scaled production contexts.

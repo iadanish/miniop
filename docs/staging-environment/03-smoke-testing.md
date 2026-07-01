@@ -2,7 +2,25 @@
 
 ## Overview
 
-Smoke testing validates that MiniOp's critical paths function correctly after deployment. These tests run against staging (and production) to catch regressions before they reach users. Covers free-tier (manual + lightweight automation) and scaled production (full CI/CD integration with monitoring).
+Smoke testing validates that MiniOp's critical paths function correctly after deployment. **As of 2026-06-30**, the implemented automated smoke suite lives in `frontend/tests/smoke/` and runs via Playwright:
+
+| Spec | Path exercised |
+|------|----------------|
+| `landing.spec.ts` | `/` hero + primary nav |
+| `login.spec.ts` | `/login` form fields |
+| `dashboard.spec.ts` | `/dashboard` auth guard + signed-in welcome |
+
+**Commands**
+
+```bash
+cd frontend
+npm run test:smoke        # local (starts dev server)
+npm run test:smoke:ci     # CI / pre-push hook
+```
+
+**CI workflow**: `.github/workflows/e2e.yml` (smoke job only). Visual regression, accessibility, and Lighthouse jobs described below are planned — not yet implemented.
+
+The sections below describe the full future smoke matrix. Only the Playwright specs above are enforced today.
 
 ---
 

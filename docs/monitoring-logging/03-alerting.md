@@ -1,5 +1,8 @@
 # Alerting
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 This document defines alert rules, escalation policies, and notification integrations for MiniOp across free-tier and production deployments.
 
 ## Alerting Philosophy

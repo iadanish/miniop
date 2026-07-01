@@ -1,12 +1,15 @@
 # Integration Testing Strategy
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 Integration testing verifies that MiniOp's modules work correctly when connected: API routes handle requests through to the database, video processing pipelines chain together, and external service integrations behave as expected. These tests catch the failures that unit tests cannot — schema mismatches, authentication middleware gaps, incorrect query results, and contract violations between services.
 
 ## Tooling
 
-Integration tests use **Vitest** with real (or containerized) dependencies. For database tests, MiniOp uses **Testcontainers** to spin up ephemeral PostgreSQL instances. For API route testing, **Supertest** exercises HTTP endpoints against the actual Express/Fastify server.
+**Phase 1 (shipped):** API integration is verified by `tests/smoke/api-crud.spec.ts` (Playwright `request` fixture → `api-smoke.log`) and UI smoke specs including `video-crud-ui.spec.ts`. Full plan: `npm run test:verify` (`run-verification-plan.mjs`). **Phase 2+ (planned):** Testcontainers + FastAPI Supertest — not in repo.
 
 ```bash
 pnpm add -D @testcontainers/postgresql supertest @types/supertest

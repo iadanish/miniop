@@ -1,5 +1,8 @@
 # Infrastructure Costs
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 This document details the infrastructure costs for running MiniOp across two deployment profiles: **Free Tier** (200–500 clips/month) and **Scaled Production** (3,000+ clips/month). All pricing is based on publicly available rates as of June 2026.
 
 ---

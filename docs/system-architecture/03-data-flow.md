@@ -1,5 +1,8 @@
 # MiniOp Data Flow Architecture
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 MiniOp processes video through a five-stage pipeline. Each stage produces artifacts stored in Cloudflare R2 (blobs) or Supabase (structured data). The pipeline is fully asynchronous — jobs are queued in PostgreSQL and polled by GPU workers.

@@ -1,5 +1,8 @@
 # Cost Tracking
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 MiniOp processes video content through multiple cloud services — transcription, AI analysis, encoding, storage, and delivery. Without granular cost tracking, a single viral upload can silently burn through your budget. This document covers how to implement per-request, per-user, and per-feature cost accounting from free-tier prototypes to production scale.
 
 ## Architecture Overview

@@ -1,5 +1,8 @@
 # API Versioning — MiniOp Video Clipping Platform
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Why Versioning Matters for MiniOp
 
 MiniOp's API serves a React frontend that ships weekly, a mobile app on a slower release cycle, and third-party integrators who may update quarterly. Without a disciplined versioning strategy, a single breaking change in the clip creation schema would break every consumer simultaneously. The versioning system must let the backend evolve without forcing coordinated deploys across all clients.
