@@ -26,8 +26,8 @@ In the Vercel dashboard, go to **Settings > Environment Variables** and add:
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_staging_anon_key_here
+SUPABASE_SERVICE_ROLE_KEY=your_staging_service_role_key_here
 OPENAI_API_KEY=sk-proj-...
 NEXT_PUBLIC_APP_URL=https://your-app.vercel.app
 ```
@@ -62,18 +62,18 @@ The Hobby plan imposes constraints that affect MiniOp specifically:
 
 ```typescript
 // app/api/process/route.ts
-import { createClient } from '@supabase/supabase-js';
-import { NextResponse } from 'next/server';
+import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
 export async function POST(request: Request) {
   const { videoId } = await request.json();
 
-  const { error } = await supabase.functions.invoke('process-video', {
+  const { error } = await supabase.functions.invoke("process-video", {
     body: { videoId },
   });
 
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ status: 'queued' });
+  return NextResponse.json({ status: "queued" });
 }
 ```
 
@@ -122,9 +122,7 @@ Create a `vercel.json` at the repository root for fine-grained control:
   "headers": [
     {
       "source": "/api/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
     },
     {
       "source": "/(.*)",
@@ -173,9 +171,12 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/api/:path*',
+        source: "/api/:path*",
         headers: [
-          { key: 'Access-Control-Allow-Origin', value: process.env.NEXT_PUBLIC_APP_URL || '*' },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: process.env.NEXT_PUBLIC_APP_URL || "*",
+          },
         ],
       },
     ];
@@ -262,12 +263,12 @@ vercel promote <deployment-url>
 
 ## Cost Estimation
 
-| Resource | Free Tier | Pro Tier |
-|----------|-----------|----------|
-| Bandwidth | 100 GB/mo | 1 TB/mo |
-| Serverless Execution | 100 GB-hrs/mo | 1000 GB-hrs/mo |
-| Build Minutes | 6000 min/mo | 24000 min/mo |
-| Team Members | 1 | $20/member |
-| Preview Deployments | Unlimited | Unlimited + Protection |
+| Resource             | Free Tier     | Pro Tier               |
+| -------------------- | ------------- | ---------------------- |
+| Bandwidth            | 100 GB/mo     | 1 TB/mo                |
+| Serverless Execution | 100 GB-hrs/mo | 1000 GB-hrs/mo         |
+| Build Minutes        | 6000 min/mo   | 24000 min/mo           |
+| Team Members         | 1             | $20/member             |
+| Preview Deployments  | Unlimited     | Unlimited + Protection |
 
 For a MiniOp instance serving ~500 monthly active users processing ~2000 clips/month, the Pro plan provides sufficient headroom. Beyond that, consider Vercel Enterprise or self-hosting with Docker on a VPS.

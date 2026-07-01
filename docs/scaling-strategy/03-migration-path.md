@@ -1,5 +1,7 @@
 # Migration Path: Free Tier to Production
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
 ## Overview
 
 This document provides step-by-step migration procedures for moving MiniOp from the free tier stack (Colab + Supabase Free + Vercel Hobby + R2 Free) to the production stack (GPU Workers + Supabase Pro + Vercel Pro + Cloudflare Workers). Each section covers one component with rollback procedures.
@@ -196,6 +198,7 @@ CREATE TRIGGER on_clip_change
 ### Rollback
 
 Supabase Pro can be downgraded back to Free in the same billing section. However:
+
 - You'll lose pg_cron, pgvector, and connection pooling
 - Data is preserved, but you may hit free tier limits again
 - Downgrade takes effect at the end of the current billing cycle
@@ -230,7 +233,7 @@ wrangler secret put SUPABASE_URL
 # Enter: https://your-project.supabase.co
 
 wrangler secret put SUPABASE_SERVICE_KEY
-# Enter: eyJ... (your service role key)
+# Enter: your_service_role_key (from Supabase)
 ```
 
 ### Deploy
@@ -312,7 +315,7 @@ docker push yourusername/minio-worker:latest
 4. Environment Variables:
    ```
    SUPABASE_URL=https://your-project.supabase.co
-   SUPABASE_SERVICE_KEY=eyJ...
+   SUPABASE_SERVICE_KEY=your_service_role_key
    R2_ENDPOINT=https://account-id.r2.cloudflarestorage.com
    R2_ACCESS_KEY=your-r2-access-key
    R2_SECRET_KEY=your-r2-secret-key
@@ -480,15 +483,15 @@ curl -X POST https://minio-api.your-subdomain.workers.dev/api/jobs \
 
 ## Migration Timeline
 
-| Day | Task | Risk | Rollback Time |
-|-----|------|------|---------------|
-| 1 | Enable R2 billing | None | Instant |
-| 1-2 | Upgrade Supabase, backup DB | Low | ~2 min |
-| 3-5 | Deploy Cloudflare Workers, test | None (additive) | Delete worker |
-| 8-14 | Deploy RunPod worker, parallel run | Low | Restart Colab |
-| 15 | Cut over to RunPod only | Medium | Restart Colab |
-| 15-16 | Upgrade Vercel, update env vars | Low | Revert env vars |
-| 17-21 | Monitor, fix issues | — | Per-component |
+| Day   | Task                               | Risk            | Rollback Time   |
+| ----- | ---------------------------------- | --------------- | --------------- |
+| 1     | Enable R2 billing                  | None            | Instant         |
+| 1-2   | Upgrade Supabase, backup DB        | Low             | ~2 min          |
+| 3-5   | Deploy Cloudflare Workers, test    | None (additive) | Delete worker   |
+| 8-14  | Deploy RunPod worker, parallel run | Low             | Restart Colab   |
+| 15    | Cut over to RunPod only            | Medium          | Restart Colab   |
+| 15-16 | Upgrade Vercel, update env vars    | Low             | Revert env vars |
+| 17-21 | Monitor, fix issues                | —               | Per-component   |
 
 ## Rollback Emergency Procedure
 
@@ -522,10 +525,10 @@ wrangler delete minio-api
 
 When you need to scale beyond 3,000 clips/month:
 
-| Scale Target | Solution | Est. Cost |
-|-------------|----------|-----------|
-| 10,000 clips/month | 2-3 GPU pods, Supabase Pro sufficient | $120-180/month |
-| 25,000 clips/month | Dedicated GPU server (Hetzner/OVH), self-hosted Postgres | $200-300/month |
-| 50,000+ clips/month | Kubernetes cluster, managed Postgres, multi-region | $500+/month |
+| Scale Target        | Solution                                                 | Est. Cost      |
+| ------------------- | -------------------------------------------------------- | -------------- |
+| 10,000 clips/month  | 2-3 GPU pods, Supabase Pro sufficient                    | $120-180/month |
+| 25,000 clips/month  | Dedicated GPU server (Hetzner/OVH), self-hosted Postgres | $200-300/month |
+| 50,000+ clips/month | Kubernetes cluster, managed Postgres, multi-region       | $500+/month    |
 
 See the architecture decision records in the project docs for guidance on when each threshold applies.

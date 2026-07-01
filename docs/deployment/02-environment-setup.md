@@ -1,5 +1,7 @@
 # Environment Setup Guide
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
 This guide walks through provisioning every external service MiniOp depends on, configuring environment variables for local development and production, and validating the full stack before deploying. MiniOp uses Next.js 14 (App Router), Supabase for backend infrastructure, OpenAI for AI-powered clip detection, and Cloudflare R2 or Supabase Storage for video file storage.
 
 ## Architecture Overview
@@ -43,7 +45,7 @@ Set the Site URL and Redirect URLs under **Authentication > URL Configuration**:
 
 ```
 Site URL: https://your-domain.com (or http://localhost:3000 for dev)
-Redirect URLs: 
+Redirect URLs:
   - https://your-domain.com/auth/callback
   - http://localhost:3000/auth/callback
 ```
@@ -52,18 +54,18 @@ Redirect URLs:
 
 Go to **Storage** and create these buckets:
 
-| Bucket Name | Public | Purpose |
-|-------------|--------|---------|
-| `videos` | No | Raw uploaded video files |
-| `clips` | Yes | Processed clip files (public for embedding) |
-| `thumbnails` | Yes | Generated thumbnail images |
+| Bucket Name  | Public | Purpose                                     |
+| ------------ | ------ | ------------------------------------------- |
+| `videos`     | No     | Raw uploaded video files                    |
+| `clips`      | Yes    | Processed clip files (public for embedding) |
+| `thumbnails` | Yes    | Generated thumbnail images                  |
 
 For the `clips` bucket, set a CORS policy to allow embedding:
 
 ```sql
 -- Run in SQL Editor
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-VALUES 
+VALUES
   ('videos', 'videos', false, 524288000, ARRAY['video/mp4', 'video/webm', 'video/quicktime']),
   ('clips', 'clips', true, 104857600, ARRAY['video/mp4', 'video/webm']),
   ('thumbnails', 'thumbnails', true, 5242880, ARRAY['image/jpeg', 'image/png', 'image/webp']);
@@ -104,8 +106,8 @@ This spins up PostgreSQL, GoTrue (auth), PostgREST, Realtime, Storage, and Edge 
       Studio URL: http://127.0.0.1:54323
     Inbucket URL: http://127.0.0.1:54324
       JWT secret: super-secret-jwt-token-with-at-least-32-characters
-        anon key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-service_role key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        anon key: your_anon_key_here
+service_role key: your_service_role_key_here
 ```
 
 Copy these values for your local `.env.local` file.
@@ -251,26 +253,30 @@ Create a configuration module that adapts to the environment:
 // lib/config.ts
 export const config = {
   storage: {
-    provider: (process.env.STORAGE_PROVIDER || 'supabase') as 'supabase' | 'r2',
+    provider: (process.env.STORAGE_PROVIDER || "supabase") as "supabase" | "r2",
     r2: {
-      accountId: process.env.R2_ACCOUNT_ID || '',
-      accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
-      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
-      bucket: process.env.R2_BUCKET_NAME || 'miniop-clips',
-      publicUrl: process.env.R2_PUBLIC_URL || '',
+      accountId: process.env.R2_ACCOUNT_ID || "",
+      accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
+      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
+      bucket: process.env.R2_BUCKET_NAME || "miniop-clips",
+      publicUrl: process.env.R2_PUBLIC_URL || "",
     },
   },
   rateLimits: {
-    maxUploadsPerHour: parseInt(process.env.RATE_LIMIT_MAX_UPLOADS_PER_HOUR || '10'),
-    maxClipsPerVideo: parseInt(process.env.RATE_LIMIT_MAX_CLIPS_PER_VIDEO || '20'),
+    maxUploadsPerHour: parseInt(
+      process.env.RATE_LIMIT_MAX_UPLOADS_PER_HOUR || "10",
+    ),
+    maxClipsPerVideo: parseInt(
+      process.env.RATE_LIMIT_MAX_CLIPS_PER_VIDEO || "20",
+    ),
   },
   openai: {
-    model: process.env.NODE_ENV === 'production' ? 'gpt-4o' : 'gpt-4o-mini',
-    whisperModel: 'whisper-1',
+    model: process.env.NODE_ENV === "production" ? "gpt-4o" : "gpt-4o-mini",
+    whisperModel: "whisper-1",
   },
   features: {
-    realtimeSubscriptions: process.env.NODE_ENV === 'production',
-    analytics: process.env.NODE_ENV === 'production',
+    realtimeSubscriptions: process.env.NODE_ENV === "production",
+    analytics: process.env.NODE_ENV === "production",
   },
 } as const;
 ```
@@ -290,5 +296,6 @@ Using `gpt-4o-mini` in development saves costs — it's 15x cheaper than `gpt-4o
 ## Next Steps
 
 With the environment configured, proceed to:
+
 - `01-vercel-deployment.md` for deploying to Vercel
 - `03-database-migration.md` for running database migrations
