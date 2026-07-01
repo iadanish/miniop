@@ -122,5 +122,5 @@ Track all significant decisions here. Format: date, decision, rationale.
 **Rationale**: GitHub reported "This branch has conflicts" + 12 failing checks on develop. Resolving allows clean merge path from develop (staging) into main. Branch is now up-to-date on GitHub.
 
 ## 2026-07-01: Fix E2E Smoke Gate for CI Checks
-**Decision**: Added SUPABASE_STAGING_SERVICE_KEY to .github/workflows/e2e.yml so the smoke global-setup uses admin.createUser (bypasses signup disabled on the Supabase instance). Also fixed 2 eslint warnings (unused React import, explicit any in vitest config) that appeared post-merge. New commit f63e194 on develop.  
-**Rationale**: E2E/Playwright Smoke Tests was failing every PR ("Failed to create Playwright smoke user: Signups not allowed"). With service key, the test setup succeeds using admin API. Combined with merge resolution, all checks should now pass on commits/PRs to develop.
+**Decision**: Added support for SMOKE_TEST_EMAIL / SMOKE_TEST_PASSWORD fallback in global-setup.ts and e2e.yml (in addition to service role key). User will manually create the account in Supabase using provided credentials and store only as GitHub secrets (no values in repo).  
+**Rationale**: Signups are disabled on the target Supabase instance. Service key may not always be exposed in CI for security. Fallback allows reliable authenticated smoke tests using a pre-created user.
