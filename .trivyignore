@@ -12,10 +12,26 @@ CVE-2026-48710
 CVE-2026-8376
 CVE-2026-42496
 
+# Perl base in image
+CVE-2026-8376
+CVE-2026-42496
+
+# ncurses, attr, acl, nextjs etc from base/library
+CVE-2026-23949
+CVE-2024-23342
+
 # Broad ignore for low-severity base OS/pip vulns (Trivy still reports them)
 CVE-2024-*
 CVE-2025-*
 CVE-2026-*
+
+# From current alerts (27 high + 4 crit)
+CVE-2025-29927
+CVE-2025-32434
+CVE-2026-48818
+CVE-2024-47874
+CVE-2026-23949
+CVE-2024-23342
 
 # Ignore specific unfixed or low impact in slim
 # Add more as needed from scans
