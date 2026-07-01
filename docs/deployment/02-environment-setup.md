@@ -1,5 +1,8 @@
 # Environment Setup Guide
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 This guide walks through provisioning every external service MiniOp depends on, configuring environment variables for local development and production, and validating the full stack before deploying. MiniOp uses Next.js 14 (App Router), Supabase for backend infrastructure, OpenAI for AI-powered clip detection, and Cloudflare R2 or Supabase Storage for video file storage.
 
 ## Architecture Overview

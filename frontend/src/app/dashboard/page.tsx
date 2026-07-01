@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import VideoList from '@/components/video-list'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function DashboardPage() {
@@ -63,6 +64,8 @@ export default async function DashboardPage() {
           <div className="text-sm text-gray-500">Minutes processed</div>
         </div>
       </div>
+
+      <VideoList />
     </div>
   )
 }

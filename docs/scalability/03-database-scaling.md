@@ -1,5 +1,8 @@
 # Database Scaling — MiniOp Video Clipping Platform
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Database Architecture
 
 MiniOp uses PostgreSQL as its primary relational database for storing users, projects, clips, jobs, and audit logs. The free tier uses a PostgreSQL `jobs` table with `pg_cron` for job dispatch (see `system-architecture/01-overview.md`). At production scale, Redis is added for high-throughput job queues (BullMQ), rate limiting counters, and session caching. This document covers scaling both systems from a single-server free-tier deployment to a production cluster handling millions of clips.

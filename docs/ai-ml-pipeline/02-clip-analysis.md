@@ -1,5 +1,8 @@
 # Clip Analysis Pipeline
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 Clip analysis is the core intelligence layer of MiniOp. Given a transcribed video with timestamped segments, this pipeline identifies which portions are most suitable for short-form clips (15-90 seconds). It combines transcript analysis, visual feature extraction, and emotion detection to score every possible segment window and surface the best candidates.

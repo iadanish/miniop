@@ -1,5 +1,8 @@
 # Server Structure — MiniOp Video Clipping Platform
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Architecture Overview
 
 MiniOp's backend is a Go monolith deployed as a set of independently scalable services. The monolith contains all business logic in a single binary but is organized into internal packages that mirror bounded contexts. This avoids the complexity of microservices while keeping the codebase modular enough to extract services later if needed.

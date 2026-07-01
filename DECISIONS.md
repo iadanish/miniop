@@ -53,8 +53,16 @@ Track all significant decisions here. Format: date, decision, rationale.
 **Rationale**: Keeps Phase 1 self-contained in `frontend/` without FastAPI dependency; validation helpers are unit-tested separately from I/O
 
 ## 2026-06-30: Playwright Smoke Gate
-**Decision**: Single orchestrator `frontend/scripts/run-smoke-gate.mjs` — one production build, external `next start`, two consecutive `test:smoke:ci` passes; wired to pre-push, `npm run test:smoke:gate`, and `e2e.yml`  
+**Decision**: Single orchestrator `frontend/scripts/run-smoke-gate.mjs` — one production build, external `next start`, two consecutive `test:smoke:ci` passes; wired to **pre-commit**, pre-push, `npm run test:smoke:gate`, and `e2e.yml`  
 **Rationale**: Eliminates flaky second-pass failures from missing `.next`; CI uses `fuser` on Linux instead of `npx kill-port`; Playwright `webServer` disabled when `PW_EXTERNAL_SERVER=1`
+
+## 2026-07-01: Upload/Delete Storage Ordering
+**Decision**: Upload writes R2 then DB with R2 cleanup on insert failure; delete removes DB row first then R2 object  
+**Rationale**: Prevents orphaned R2 files on failed inserts and stale DB metadata pointing at deleted objects
+
+## 2026-07-01: Middleware Auth Scope
+**Decision**: `getUser()` runs only on `/dashboard/*` and `/api/videos/*`; unauthenticated `/dashboard` requests redirect to `/login` in middleware  
+**Rationale**: Public pages skip auth roundtrip; protection is centralized before layout render
 
 ## 2026-06-30: Security Dependency Baseline
 **Decision**: Frontend pins `next@14.2.35`, `vitest@3.2.6`; backend pins `fastapi@0.138.2`, `starlette@1.3.1`, `pydantic@2.11.7`; CI `npm audit --audit-level=critical` and `pip-audit` run without `continue-on-error`  

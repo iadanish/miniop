@@ -20,5 +20,6 @@ test.describe('dashboard', () => {
     await page.waitForURL(/\/dashboard/, { timeout: 45_000 })
     await expect(page.getByRole('heading', { name: /dashboard/i })).toBeVisible()
     await expect(page.getByText(/welcome back/i)).toBeVisible()
+    await expect(page.getByRole('heading', { name: /your videos/i })).toBeVisible()
   })
 })

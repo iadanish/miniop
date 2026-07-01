@@ -1,5 +1,8 @@
 # Agent Architecture
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 MiniOp's agentic orchestration system coordinates AI-powered video clipping, review, and deployment across a distributed pipeline. This document covers the architecture from local development (free tier) through scaled production.
 
 ## Core Agent Topology

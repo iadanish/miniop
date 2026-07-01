@@ -15,7 +15,7 @@ MiniOp's roadmap is organized into quarterly themes. Each theme has a clear outc
 - Next.js API routes: `GET/POST /api/videos`, `POST /api/videos/upload`, `GET/DELETE /api/videos/:id`
 - Cloudflare R2 storage for uploaded source files
 - Supabase schema migration for `profiles`, `videos`, `clips` with RLS (SQL in `supabase/migrations/`)
-- Playwright smoke suite + pre-push gate
+- Playwright smoke suite + pre-commit smoke gate (`run-smoke-gate.mjs`); dashboard lists videos via `GET /api/videos` with delete
 
 **Planned next (Phase 2 — not shipped)**
 

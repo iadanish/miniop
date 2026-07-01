@@ -1,5 +1,8 @@
 # MiniOp Infrastructure Setup
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Infrastructure Philosophy
 
 MiniOp's infrastructure is designed around a single constraint: **minimize cost while remaining functional**. The free tier runs entirely on free-tier cloud services with GPU compute sourced from Google Colab and Kaggle notebooks. The scaled tier replaces only the GPU bottleneck with paid compute — everything else stays on free tiers as long as possible.

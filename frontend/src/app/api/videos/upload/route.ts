@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { uploadObjectToR2 } from '@/lib/r2'
+import { deleteObjectFromR2, uploadObjectToR2 } from '@/lib/r2'
 import {
   buildStorageKey,
   validateVideoUpload,
@@ -66,6 +66,11 @@ export async function POST(request: Request) {
     .single()
 
   if (error) {
+    try {
+      await deleteObjectFromR2(storageKey)
+    } catch (cleanupError) {
+      console.error('R2 cleanup failed after DB insert error:', cleanupError)
+    }
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 

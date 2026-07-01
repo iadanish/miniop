@@ -1,5 +1,8 @@
 # Staging Workflow
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Overview
 
 This document defines the development workflow for MiniOp's staging environment: branching strategy, PR lifecycle, database migrations, feature flags, video processing pipeline testing, and promotion to production. Covers both free-tier (Vercel + Supabase branching) and scaled production (dedicated staging infra).

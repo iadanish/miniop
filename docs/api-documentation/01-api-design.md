@@ -1,5 +1,8 @@
 # API Design — MiniOp Video Clipping Platform
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Design Philosophy
 
 MiniOp's API follows a resource-oriented REST design where every core domain entity — clips, projects, jobs, users — maps to a predictable URL pattern. The API serves two consumers: the React/Next.js frontend and third-party integrators who build on top of MiniOp's clipping engine. Every endpoint must work identically whether a free-tier user clips a 5-minute video or an enterprise customer processes a 4-hour livestream.

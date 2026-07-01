@@ -1,5 +1,8 @@
 # Horizontal Scaling — MiniOp Video Clipping Platform
 
+> **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
+
+
 ## Scaling Overview
 
 MiniOp's architecture is designed to scale horizontally from a single Docker Compose instance to a multi-node Kubernetes cluster. The key scaling units are the API servers (stateless, scale on request volume), the workers (CPU/GPU-bound, scale on queue depth), and the database (scale via read replicas and connection pooling). This document covers the practical steps for scaling each component.
