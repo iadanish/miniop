@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import React from 'react'
 import { render, screen, within } from '@testing-library/react'
 
 const { redirectMock, getUserMock } = vi.hoisted(() => ({

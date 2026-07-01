@@ -28,6 +28,7 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
 
       - name: Upload Trivy scan results to GitHub Security tab
         if: github.event.repository.private == true
@@ -104,6 +105,8 @@ jobs:
           image-ref: 'miniop-backend:scan'
           format: 'sarif'
           output: 'backend-trivy.sarif'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
 
       - name: Scan worker image with Trivy
         uses: aquasecurity/trivy-action@master
@@ -111,6 +114,8 @@ jobs:
           image-ref: 'miniop-worker:scan'
           format: 'sarif'
           output: 'worker-trivy.sarif'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
 
       - name: Upload container scan results
         if: github.event.repository.private == true

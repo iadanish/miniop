@@ -2,7 +2,6 @@
 
 > **Implementation status (2026-07-01):** Phase 2+ design — **not shipped** in Phase 1. Shipped today: Next.js auth, dashboard, video upload, `/api/videos/*` CRUD, R2 storage, Playwright smoke gate. See `docs/product-strategy/03-roadmap.md` and `CONTEXT.md`.
 
-
 ## Infrastructure Philosophy
 
 MiniOp's infrastructure is designed around a single constraint: **minimize cost while remaining functional**. The free tier runs entirely on free-tier cloud services with GPU compute sourced from Google Colab and Kaggle notebooks. The scaled tier replaces only the GPU bottleneck with paid compute — everything else stays on free tiers as long as possible.
@@ -588,8 +587,8 @@ python -m transcription.worker --local --api-base http://localhost:8787
 
 # Supabase
 SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
+SUPABASE_ANON_KEY=your_anon_key_here
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 
 # Cloudflare
 R2_ACCOUNT_ID=your-account-id
