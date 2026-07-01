@@ -108,10 +108,6 @@ async function main() {
   const stagingSmoke = parseRows(report.staging.checks.smoke_users.body)
   const prodSmoke = parseRows(report.prod.checks.smoke_users.body)
 
-  if (!token || token.includes('REPLACE_WITH')) {
-    console.log('SKIP: SUPABASE_ACCESS_TOKEN not set — using last audit from scratch only')
-    process.exit(0)
-  }
   const needsRevert =
     stagingTables.length > 0 ||
     prodTables.length > 0 ||
