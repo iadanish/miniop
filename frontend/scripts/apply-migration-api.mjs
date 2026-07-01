@@ -6,10 +6,10 @@ import { config as loadEnv } from 'dotenv'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 loadEnv({ path: path.resolve(__dirname, '../../.env') })
 
+import { requireMiniOpProjectRef } from './supabase-project-guard.mjs'
+
 const token = process.env.SUPABASE_ACCESS_TOKEN
-const projectRef = (
-  process.env.SUPABASE_PROJECT_REF ?? 'gjeymxxhrggsxytzbiur'
-).trim()
+const projectRef = requireMiniOpProjectRef()
 
 if (!token) {
   console.error('SUPABASE_ACCESS_TOKEN is required')

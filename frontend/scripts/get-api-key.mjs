@@ -1,6 +1,8 @@
 const token = process.env.SUPABASE_ACCESS_TOKEN
 const keyId = process.argv[2]
-const projectRef = 'vnzoksaiowqwaukmtbsi'
+import { requireMiniOpProjectRef } from './supabase-project-guard.mjs'
+
+const projectRef = requireMiniOpProjectRef()
 
 const response = await fetch(
   `https://api.supabase.com/v1/projects/${projectRef}/api-keys/${keyId}`,

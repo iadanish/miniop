@@ -20,7 +20,7 @@
 | 1.5 | Create landing page + Apple-style design | [x] | Landing page audited: mobile nav, a11y, FAQ accordion, doc-aligned copy |
 | 1.6 | Create dashboard layout | [x] | `/dashboard` route with nav, stats from DB, upload CTA |
 | 1.7 | Build video upload page | [x] | `/dashboard/upload` + dashboard video list/delete via `/api/videos` |
-| 1.8 | Set up Supabase database schema (users, videos, clips) | [x] | Migration applied to staging `vnzoksaiowqwaukmtbsi`; profiles/videos/clips tables + RLS verified |
+| 1.8 | Set up Supabase database schema (users, videos, clips) | [x] | Migration on MiniOp `pycaruihndpxznvxuqdk`; LittleOS staging reverted |
 | 1.9 | Basic API routes for video CRUD | [x] | `/api/videos`, `/api/videos/upload`, `/api/videos/[id]` |
 | 1.10 | Playwright smoke tests + pre-commit gate | [x] | 7 smoke specs (incl. API CRUD + UI delete); `run-smoke-gate.mjs` + `run-verification-plan.mjs`; CI green on `6b72306` |
 

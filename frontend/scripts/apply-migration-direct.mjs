@@ -7,10 +7,10 @@ import pg from 'pg'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 loadEnv({ path: path.resolve(__dirname, '../../.env') })
 
+import { requireMiniOpProjectRef } from './supabase-project-guard.mjs'
+
 const password = process.env.SUPABASE_DB_PASSWORD
-const projectRef = (
-  process.env.SUPABASE_PROJECT_REF ?? 'gjeymxxhrggsxytzbiur'
-).trim()
+const projectRef = requireMiniOpProjectRef()
 
 const configs = [
   {

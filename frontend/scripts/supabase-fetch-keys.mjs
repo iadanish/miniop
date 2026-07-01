@@ -1,5 +1,7 @@
 const token = process.env.SUPABASE_ACCESS_TOKEN
-const projectRef = (process.env.SUPABASE_PROJECT_REF ?? 'vnzoksaiowqwaukmtbsi').trim()
+import { requireMiniOpProjectRef } from './supabase-project-guard.mjs'
+
+const projectRef = requireMiniOpProjectRef()
 
 if (!token) {
   console.error('SUPABASE_ACCESS_TOKEN required')

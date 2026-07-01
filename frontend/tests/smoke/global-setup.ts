@@ -39,6 +39,9 @@ export default async function globalSetup() {
   const anonKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
     process.env.SUPABASE_STAGING_ANON_KEY
+  const serviceKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ??
+    process.env.SUPABASE_STAGING_SERVICE_KEY
 
   if (!url || !anonKey) {
     throw new Error('Missing Supabase URL or anon key for Playwright global setup')
@@ -52,19 +55,36 @@ export default async function globalSetup() {
     realtime: { transport: ws as never },
   })
 
-  const { error: signUpError } = await authClient.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
+  if (serviceKey) {
+    const adminClient = createClient(url, serviceKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
+    const { error: createError } = await adminClient.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: {
         plan: 'free',
         upload_quota_seconds: 300,
       },
-    },
-  })
-
-  if (signUpError) {
-    throw new Error(`Failed to create Playwright smoke user: ${signUpError.message}`)
+    })
+    if (createError) {
+      throw new Error(`Failed to create Playwright smoke user: ${createError.message}`)
+    }
+  } else {
+    const { error: signUpError } = await authClient.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          plan: 'free',
+          upload_quota_seconds: 300,
+        },
+      },
+    })
+    if (signUpError) {
+      throw new Error(`Failed to create Playwright smoke user: ${signUpError.message}`)
+    }
   }
 
   const { error: signInError } = await authClient.auth.signInWithPassword({

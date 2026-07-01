@@ -40,9 +40,9 @@ Track all significant decisions here. Format: date, decision, rationale.
 **Decision**: Adopt Apple-inspired minimalist design across the entire UI  
 **Rationale**: Clean typography, lots of whitespace, subtle gray backgrounds, rounded corners, black/white/gray palette with minimal accents. Applied to landing page, auth pages, and dashboard.
 
-## 2026-06-30: Staging Supabase Project Alignment
-**Decision**: MiniOp staging uses Supabase project `vnzoksaiowqwaukmtbsi` (LittleOS Staging) with publishable/secret API keys (legacy JWT keys disabled)  
-**Rationale**: CLI-linked staging project matches accessible Management API token; migration and API smoke verified end-to-end on this project
+## 2026-07-01: MiniOp-Only Supabase Project
+**Decision**: MiniOp uses dedicated Supabase project `pycaruihndpxznvxuqdk` only — never LittleOS Staging (`vnzoksaiowqwaukmtbsi`) or LittleOS Prod (`lifmjtvfoppoxymvcemq`)  
+**Rationale**: Cross-project contamination broke LittleOS `handle_new_user`; Phase 1 migration pushed via `supabase db push` to MiniOp; LittleOS artifacts reverted 2026-07-01
 
 ## 2026-06-30: Canonical Dashboard Path
 **Decision**: Dashboard lives at `/dashboard` (not route-group `/`); landing stays public at `/`  
