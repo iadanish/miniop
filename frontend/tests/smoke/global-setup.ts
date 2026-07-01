@@ -58,6 +58,7 @@ export default async function globalSetup() {
   if (serviceKey) {
     const adminClient = createClient(url, serviceKey, {
       auth: { autoRefreshToken: false, persistSession: false },
+      realtime: { transport: ws as never },
     })
     const { error: createError } = await adminClient.auth.admin.createUser({
       email,
