@@ -5,7 +5,8 @@ WORKDIR /app
 # Upgrade base tools and OS packages to mitigate known vulnerabilities in base image
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     && pip install --upgrade pip setuptools wheel \
-    && apt-get purge -y perl-base perl perl-modules || true \
+    && apt-get purge -y perl* ncurses* libncurses* || true \
+    && apt-get autoremove -y || true \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt requirements-dev.txt ./
