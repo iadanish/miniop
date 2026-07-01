@@ -112,4 +112,8 @@ Track all significant decisions here. Format: date, decision, rationale.
 ## 2026-07-01: Stag Branch for Local Merge Workflow
 **Decision**: Create and push dedicated `stag` branch to origin (`origin/stag`). All changes are committed on `stag` first, then can be merged into local `main`. Remote branch created so merges can be done from local machine.  
 **Rationale**: Directly fulfills "commit code to stag and create repo so we can merge into main from local". Provides controlled flow: stag acts as the pre-merge area. Conventional commit used. Smoke gate skipped only because this was pure docs + rules change.
+
+## 2026-07-01: Secrets Removal (No Secrets in Code)
+**Decision**: Removed secret injection logic from `frontend/next.config.js` (no longer loads .env secrets at build). Replaced all example secret strings (eyJ... JWTs and keys) in documentation with safe placeholders like "your_*_key". Confirmed all runtime code already uses process.env only and .env is ignored.  
+**Rationale**: Reinforce "Never put secrets in repo". Hardens security posture for MiniOp GitHub repo. All actual credentials stay exclusively in local .env + platform secret stores (Vercel, GitHub Secrets).
 **Rationale**: User request to enforce ironclad boundaries and prevent accidental leakage or cross-project actions even under prompt pressure. Supersedes and strengthens prior MiniOp-Only Boundary. This rule is now in CLAUDE.md and must be respected in all future sessions.
