@@ -83,7 +83,19 @@ export default async function globalSetup() {
       },
     })
     if (signUpError) {
-      throw new Error(`Failed to create Playwright smoke user: ${signUpError.message}`)
+      if (signUpError.message.includes('Signups not allowed')) {
+        // Fall back to pre-created test user (set SMOKE_TEST_EMAIL / PASSWORD in CI secrets or .env)
+        const fallbackEmail = process.env.SMOKE_TEST_EMAIL
+        const fallbackPassword = process.env.SMOKE_TEST_PASSWORD
+        if (fallbackEmail && fallbackPassword) {
+          email = fallbackEmail
+          password = fallbackPassword
+        } else {
+          throw new Error(`Failed to create Playwright smoke user (signups disabled and no fallback SMOKE_TEST_* secrets): ${signUpError.message}`)
+        }
+      } else {
+        throw new Error(`Failed to create Playwright smoke user: ${signUpError.message}`)
+      }
     }
   }
 
