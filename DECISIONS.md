@@ -128,3 +128,19 @@ Track all significant decisions here. Format: date, decision, rationale.
 ## 2026-07-01: Mitigate 219 Code Scanning Alerts
 **Decision**: Addressed bulk of Trivy-based code scanning alerts (package vulns in Docker images) by: switching to python:3.12-slim base (newer patches), upgrading pip/setuptools/wheel in Dockerfiles, adding .trivyignore, filtering scans to CRITICAL/HIGH + ignore-unfixed, aggressive purge of perl* ncurses*, updated torch to 2.6.0. We do not fix every low-severity or base-image CVE in source (not practical); focus on high ones and suppress noise. Alerts count should drop on re-scans after new image builds.  
 **Rationale**: 219+ alerts (now 31 crit/high) were mostly from python:3.11-slim base + deps like starlette/wheel/torch/perl in container scans. GitHub code scanning counts all; we mitigate actionable ones without overhauling base images. Switched base for better out-of-box security. Purged perl/ncurses to remove specific crit.
+
+## 2026-07-01: Replace Whisper with MiMo-V2.5-ASR
+**Decision**: Use Xiaomi MiMo-V2.5-ASR for video transcription instead of self-hosted Whisper.  
+**Rationale**: MiMo-ASR costs ¥0.5/hour (~$0.07) — negligible for free tier. Eliminates need for GPU infrastructure (Colab/Kaggle). API-compatible with OpenAI protocol. BYOK model maintained.
+
+## 2026-07-01: MiMo-V2.5-Pro for Content Analysis
+**Decision**: Use MiMo-V2.5-Pro (¥0.025/MTok cached) for hook detection, retention scoring, and virality analysis.  
+**Rationale**: Replaces complex local ML pipeline (CLIP + FER + rule-based scoring). Single API call replaces multiple model inference steps. 10x cheaper with cached tokens.
+
+## 2026-07-01: Processing Pipeline Architecture
+**Decision**: Next.js API routes trigger processing; Python FastAPI backend handles FFmpeg + MiMo API calls; Supabase processing_jobs table tracks state.  
+**Rationale**: Keeps heavy processing in Python (FFmpeg, async HTTP) while maintaining Next.js as the frontend/API gateway. Job table enables retry and progress tracking.
+
+## 2026-07-01: Backend Processing Implementation
+**Decision**: Backend uses FastAPI BackgroundTasks for async processing; downloads video from R2 via boto3; stores results directly to Supabase via REST API; uses RPC function for job status updates.  
+**Rationale**: Simple architecture without Redis/Celery for Phase 2. BackgroundTasks sufficient for MVP. Direct Supabase REST calls avoid additional DB driver complexity.

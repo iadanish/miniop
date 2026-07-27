@@ -32,10 +32,18 @@
 
 | #   | Task                               | Status | Notes |
 | --- | ---------------------------------- | ------ | ----- |
-| 2.1 | Whisper transcription integration  | [ ]    |       |
-| 2.2 | Scene detection + virality scoring | [ ]    |       |
-| 2.3 | Clip extraction with FFmpeg        | [ ]    |       |
-| 2.4 | Caption generation                 | [ ]    |       |
+| 2.1 | MiMo-V2.5-ASR transcription        | [x]    | Replaces Whisper; ¥0.5/hr; backend/app/services/mimo_asr.py |
+| 2.2 | MiMo-V2.5-Pro content analysis     | [x]    | Hook/retention/quotability scoring; backend/app/services/mimo_analyzer.py |
+| 2.3 | Virality scoring algorithm         | [x]    | Multi-signal scoring; backend/app/services/scorer.py |
+| 2.4 | Processing pipeline worker         | [x]    | FFmpeg + MiMo + scoring; backend/app/services/processor.py |
+| 2.5 | DB schema (processing_jobs, transcriptions) | [x] | supabase/migrations/20260701000000_phase2_mimo_pipeline.sql |
+| 2.6 | API routes (process, status, clips) | [x]   | /api/videos/[id]/process, /status, /clips |
+| 2.7 | API key settings UI                | [x]    | /api/settings/api-keys + api-key-settings.tsx |
+| 2.8 | Frontend components                | [x]    | process-button, processing-status, clips-list |
+| 2.9 | Backend API + worker               | [x]    | backend/app/routers/processing.py, config.py, update_job_status RPC |
+| 2.10 | Caption generation                 | [x]    | Integrated in mimo_analyzer.py |
+| 2.11 | Scene detection (PySceneDetect)    | [ ]    | Phase 2.3 — future |
+| 2.12 | Clip extraction with FFmpeg        | [ ]    | Phase 2.3 — future |
 
 ## Phase 3: Brand & Social
 
@@ -51,7 +59,7 @@
 
 ## Next Action
 
-**2.1** — Whisper transcription integration (Phase 2)
+**2.11** — Scene detection integration (Phase 2.3)
 
 ---
 

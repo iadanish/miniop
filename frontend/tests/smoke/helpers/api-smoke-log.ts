@@ -18,7 +18,7 @@ export function initApiSmokeLog() {
     `[${new Date().toISOString()}] API CRUD via Playwright request fixture`,
     'method: Playwright test.request (not curl, not custom fetch)',
     'spec: frontend/tests/smoke/api-crud.spec.ts',
-    `baseURL: ${process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3000'}`,
+    `baseURL: ${process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3005'}`,
     `log: ${logPath}`,
     '',
   ].join('\n')

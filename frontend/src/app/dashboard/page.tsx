@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import VideoList from '@/components/video-list'
+import ApiKeySettings from '@/components/api-key-settings'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function DashboardPage() {
@@ -44,7 +45,7 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-6 mb-10">
         <div className="p-8 rounded-2xl bg-gray-50">
           <div className="text-3xl font-semibold text-black mb-1">
             {videoCount ?? 0}
@@ -65,7 +66,14 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <VideoList />
+      <div className="grid lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+          <VideoList />
+        </div>
+        <div>
+          <ApiKeySettings />
+        </div>
+      </div>
     </div>
   )
 }

@@ -44,3 +44,11 @@ terminals/
 mcps/
 .commandcode/
 .mimocode/
+
+# Documentation
+docs/
+
+# Security Audits
+*audit*
+.trivy-reports/
+*.trivy.json

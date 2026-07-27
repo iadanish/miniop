@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test'
 const baseURL =
   process.env.PLAYWRIGHT_BASE_URL ??
   process.env.BASE_URL ??
-  'http://127.0.0.1:3000'
+  'http://127.0.0.1:3005'
 
 const useExternalServer = !!process.env.PW_EXTERNAL_SERVER
 
@@ -32,8 +32,8 @@ export default defineConfig({
     : {
         webServer: {
           command: process.env.CI
-            ? 'npx next start -H 127.0.0.1 -p 3000'
-            : 'npx next dev -H 127.0.0.1 -p 3000',
+            ? 'npx next start -H 127.0.0.1 -p 3005'
+            : 'npx next dev -H 127.0.0.1 -p 3005',
           url: baseURL,
           reuseExistingServer: !process.env.CI,
           timeout: 300_000,

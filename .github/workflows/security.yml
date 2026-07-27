@@ -29,6 +29,7 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
+          ignorefile: .trivyignore
 
       - name: Upload Trivy scan results to GitHub Security tab
         if: github.event.repository.private == true
@@ -107,6 +108,7 @@ jobs:
           output: 'backend-trivy.sarif'
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
+          ignorefile: .trivyignore
 
       - name: Scan worker image with Trivy
         uses: aquasecurity/trivy-action@master
@@ -116,6 +118,7 @@ jobs:
           output: 'worker-trivy.sarif'
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
+          ignorefile: .trivyignore
 
       - name: Upload container scan results
         if: github.event.repository.private == true

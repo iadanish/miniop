@@ -8,6 +8,7 @@ MiniOp is an open-source Opus Clip clone — an AI-powered video clipping tool. 
 
 - **135 docs** across 20+ categories — documentation complete
 - **Phase 1 foundation shipped** — auth, landing, dashboard at `/dashboard`, video upload UI, video CRUD API routes, R2 upload integration, Playwright smoke suite
+- **Phase 2 MiMo pipeline implemented** — Backend FastAPI with processing endpoints, MiMo-ASR transcription, MiMo-Pro analysis, virality scoring, clip generation, frontend UI for triggering and viewing results
 - **Auth complete** — Supabase Auth with email/password, login/signup/logout, middleware, protected dashboard
 - **Landing page complete** — Apple-style minimalist marketing page with hero, pipeline demo, product sections, pricing, FAQ, and footer
 - **Apple-style design system** — White/gray/black palette, generous spacing, rounded-full CTAs; applied across landing, auth, and dashboard pages
@@ -27,7 +28,7 @@ MiniOp is an open-source Opus Clip clone — an AI-powered video clipping tool. 
 - **Database**: Supabase (PostgreSQL + Auth)
 - **Storage**: Cloudflare R2 (bucket: `miniops`)
 - **Hosting**: Vercel (frontend), Cloudflare Workers (API)
-- **AI/ML**: Whisper transcription, scene detection, virality scoring
+- **AI/ML**: MiMo-V2.5-ASR transcription, MiMo-V2.5-Pro analysis, FFmpeg processing, virality scoring
 - **Notifications**: Telegram Bot API primary, Resend email backup
 
 ## Key Files
@@ -37,11 +38,24 @@ MiniOp is an open-source Opus Clip clone — an AI-powered video clipping tool. 
 - `frontend/src/components/landing-footer.tsx` — Footer with product and GitHub links
 - `frontend/src/app/(auth)/` — Login/signup pages (Apple-style design)
 - `frontend/src/app/dashboard/` — Dashboard shell, stats, upload page at `/dashboard/upload`
-- `frontend/src/app/api/videos/` — Video list/create/upload/delete API routes
+- `frontend/src/app/api/videos/` — Video list/create/upload/delete/process/status/clips API routes
+- `frontend/src/app/api/settings/api-keys/` — MiMo API key management
+- `frontend/src/components/process-button.tsx` — Trigger video processing
+- `frontend/src/components/processing-status.tsx` — Real-time processing progress
+- `frontend/src/components/clips-list.tsx` — Display ranked clips with scores
+- `frontend/src/components/api-key-settings.tsx` — API key input/save UI
+- `frontend/src/types/processing.ts` — Processing/clip TypeScript types
 - `frontend/tests/smoke/` — Playwright smoke specs
-- `supabase/migrations/` — profiles, videos, clips schema with RLS
+- `supabase/migrations/` — profiles, videos, clips, processing_jobs, transcriptions schema with RLS
+- `backend/app/services/mimo_asr.py` — MiMo-V2.5-ASR transcription client
+- `backend/app/services/mimo_analyzer.py` — MiMo-V2.5-Pro content analysis client
+- `backend/app/services/ffmpeg.py` — FFmpeg audio extraction and clip rendering
+- `backend/app/services/scorer.py` — Virality scoring algorithm
+- `backend/app/services/processor.py` — Full processing pipeline orchestrator
+- `backend/app/routers/processing.py` — Backend API for triggering processing
+- `backend/app/config.py` — Backend configuration (env vars)
 - `frontend/` — Next.js app
-- `backend/` — Python backend (skeleton only)
+- `backend/` — Python FastAPI (processing services)
 - `worker/` — Cloudflare Worker
 - `docs/` — 135 documentation files
 - `skills/` — Codex skill definitions

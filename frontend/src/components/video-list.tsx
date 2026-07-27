@@ -1,6 +1,9 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import ProcessButton from '@/components/process-button'
+import ProcessingStatus from '@/components/processing-status'
+import ClipsList from '@/components/clips-list'
 
 type Video = {
   id: string
@@ -22,6 +25,7 @@ export default function VideoList() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
 
   const loadVideos = useCallback(async () => {
     setLoading(true)
@@ -64,6 +68,12 @@ export default function VideoList() {
     }
   }
 
+  function handleStatusChange(videoId: string, newStatus: string) {
+    setVideos((current) =>
+      current.map((v) => (v.id === videoId ? { ...v, status: newStatus } : v))
+    )
+  }
+
   return (
     <section aria-labelledby="your-videos-heading" className="mt-12">
       <h3 id="your-videos-heading" className="text-xl font-semibold text-black mb-4">
@@ -85,25 +95,48 @@ export default function VideoList() {
       {!loading && videos.length > 0 && (
         <ul className="divide-y divide-gray-100 rounded-2xl border border-gray-100" data-testid="video-list">
           {videos.map((video) => (
-            <li
-              key={video.id}
-              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-6 py-4"
-            >
-              <div>
-                <p className="font-medium text-black">{video.title}</p>
-                <p className="text-sm text-gray-500">
-                  {video.filename} · {formatBytes(video.file_size_bytes)} · {video.status}
-                </p>
+            <li key={video.id} className="px-6 py-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div
+                  className="cursor-pointer flex-1"
+                  onClick={() => setExpandedId(expandedId === video.id ? null : video.id)}
+                >
+                  <p className="font-medium text-black">{video.title}</p>
+                  <p className="text-sm text-gray-500">
+                    {video.filename} · {formatBytes(video.file_size_bytes)} ·{' '}
+                    <span className="capitalize">{video.status}</span>
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ProcessButton
+                    videoId={video.id}
+                    status={video.status}
+                    onProcessingStart={() => handleStatusChange(video.id, 'queued')}
+                  />
+                  <button
+                    type="button"
+                    data-testid={`delete-video-${video.id}`}
+                    disabled={deletingId === video.id}
+                    onClick={() => handleDelete(video.id, video.title)}
+                    className="inline-flex h-9 items-center justify-center rounded-full border border-gray-200 px-4 text-sm text-gray-700 transition-colors hover:border-gray-300 hover:text-black disabled:opacity-50"
+                  >
+                    {deletingId === video.id ? 'Deleting…' : 'Delete'}
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                data-testid={`delete-video-${video.id}`}
-                disabled={deletingId === video.id}
-                onClick={() => handleDelete(video.id, video.title)}
-                className="inline-flex h-9 items-center justify-center rounded-full border border-gray-200 px-4 text-sm text-gray-700 transition-colors hover:border-gray-300 hover:text-black disabled:opacity-50"
-              >
-                {deletingId === video.id ? 'Deleting…' : 'Delete'}
-              </button>
+
+              {expandedId === video.id && (
+                <div className="mt-4 space-y-4">
+                  {(video.status === 'queued' || video.status === 'processing') && (
+                    <ProcessingStatus
+                      videoId={video.id}
+                      initialStatus={video.status}
+                      onStatusChange={(s) => handleStatusChange(video.id, s)}
+                    />
+                  )}
+                  <ClipsList videoId={video.id} videoStatus={video.status} />
+                </div>
+              )}
             </li>
           ))}
         </ul>
