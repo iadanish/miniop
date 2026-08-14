@@ -3,5 +3,5 @@ whisper==1.1.10
 torch==2.6.0
 torchvision==0.21.0
 opencv-python==4.9.0.80
-numpy==1.26.3
+numpy==2.5.2
 Pillow==10.2.0
