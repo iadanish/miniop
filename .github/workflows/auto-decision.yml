@@ -176,7 +176,7 @@ jobs:
             });
 
       - name: Close stale issues
-        uses: actions/stale@v9
+        uses: actions/stale@v11
         with:
           stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity.'
           close-issue-message: 'Closed by AI agent due to inactivity.'
